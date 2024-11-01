@@ -5,6 +5,7 @@ library(KMsurv)
 library(survminer)
 library(moments)
 
+#stor tissemand
 # Load the data
 load("/Users/marcusbassepedersen/R-code/melanoma30.RData")
 df_melanoma30 <- melanoma30
