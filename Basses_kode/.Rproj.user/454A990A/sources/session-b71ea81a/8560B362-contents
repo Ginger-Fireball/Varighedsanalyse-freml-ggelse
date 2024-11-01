@@ -34,7 +34,7 @@ for (var in continuous_vars) {
 for (var in continuous_vars) {
   pdf(paste("Billeder_duration/Histogram_and_Density_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
-    geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
+  #  geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
     geom_density(aes(y = ..density.. * max(..count..)), color = "red") +
     ggtitle(paste("Histogram and Density of", var)) +
     theme_minimal() +
@@ -130,7 +130,7 @@ AIC(cox_model, cox_model_log)
 
 # Opgave 5: Additional Steps (To be defined as needed)
 # You can continue with model assessment, diagnostics, or any additional tasks for opgave 5
-
+  
 
 
 
