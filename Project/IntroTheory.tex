@@ -15,13 +15,13 @@ De vil ikke give mening at lave en test da det er et nummer givet til dem
 \item Cause of death status. \newline
 Dette kan vi ikke rigtig kigge på outliers, da det er dødsårsagen 
 \item Dead/alive at time of follow-up dead. \newline
-Her kan vi heller ikke kigge på outliers da det er status på patient efter et bestemt tids interval
+Her kan vi Heller ikke kigge på outliers da det er status på patient efter et bestemt tids interval
 \item Inflammatory cell infiltration score ici. \newline
-heller ikke her
+Heller ikke her
 \item Presence of epitheloid cells epicell. \newline
-heller ikke her
+Heller ikke her
 \item Presence of ulceration ulceration. \newline
-heller ikke her
+Heller ikke her
 \item Thickness of tumor (1/100mm) thickness.\\
 \begin{figure}
     \centering
@@ -31,22 +31,25 @@ heller ikke her
 \textbf{Distribution: } Tykkelsen af tumor fremstår som en betadistribution som er, naturligvis, ikke negativ, stiger i starten og falder derefter og får en lang højre hale. Undersøges yderligere logaritmen til disse værdier fremgår en nogenlunde normaldistribution.\\
 
 \item Sex sex.\\
-Her kigger vi heller ikke på outliers
+Her kigger vi Heller ikke på outliers
 \item Age at operation age.\\
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Project/BIlleder_Duration/Age_Outliers.jpeg}
 \end{figure}
 \textbf{Outliers: }Her ser vi en enkelt ung outlier 
-\textbf{Age: } Aldersmæssigt 
+\textbf{Age: } Aldersmæssigt haves en tung venstrehale og ellers fremstår en normal distribution nogenlunde
 \item Natural log of thickness/100 logthick.\\
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Project/BIlleder_Duration/logthickness_Outlier.jpeg}
 \end{figure}
-We see one outlier when taking log to it but to dertemin if the outlier has any influence on the health of the patient another method must be used aswell
+\textbf{Outliers: }We see one outlier when taking log to it but to dertemin if the outlier has any influence on the health of the patient another method must be used aswell\\
+\textbf{Distribution: }Kigges på distributionen af logaritmen af tykkelsen på tumor, vil der være en nogenlunde normaldistribution, dog med en tung venstre hale.
 \item Depth of invasion of tumor score invas2.
 \end{enumerate}
+
+Med henblik på de resterende, ikke kontinuerte variable, er der en fin distribution kategorierne imellem.
 
 
 
