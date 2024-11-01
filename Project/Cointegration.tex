@@ -1,0 +1,144 @@
+\chapter{Varighedsanalyse}
+\begin{note}
+Give a heuristic derivation of Greenwood's formula by applying the multivariate delta-method and assuming that 
+\[
+\hat{p}_k = \frac{d_k}{r(u_{k-1})}
+\]
+are uncorrelated, and 
+\[
+d_k \mid r(u_{k-1}) \sim \text{Bin}(r(u_{k-1}), p_k).
+\]
+\end{note}
+Til alle tider $u_k$ så er den betingede ssh for at overleve fra $u_k$ til $u_{k-1}$ er givet som
+\begin{align*}
+    \hat{p}_k=\frac{d_k}{r(u_{k-1})}
+\end{align*}
+$d_k$ er antal døde ved tiden $u_k$ og $r(u_{k-1})$ er antallet af folk i risiko ved tiden $u_k$.\\
+Dette giver at den samlede overlevelses ssh op til tiden $u_k$ er produktet af alle disse betingede ssh:
+\begin{align}\label{s_funktion}
+    \hat{S}(u_k)=\prod_{j=1}^k 1-\hat{p}_j=\prod_{j=1}^k1-\left(\frac{d_j}{r(u_{j-1})}\right)=g(\hat{p}_1,\ldots,\hat{p}_k)
+\end{align}
+\textbf{Vi kigger nu på variansen} af ovenstående udtryk (Bemærk at $\hat{S}(u_k)$ er et produkt af ikke korrelerede  pga. antagelserne i opgaven. Eftersom de ikke er korrelerede kan vi benytte delta metoden til at approksimere variansen.\\
+Den multivariate Deltametode er en varians approksimation af en funktion $g(x)$ med en tilfældig variabel $X$ givet:
+\begin{align*}
+    \text{Var}(h(X)) \approx \nabla h(X)^\top \Sigma \nabla h(X)
+\end{align*}
+hvor $\Sigma$ er kovarians matricen mellem $\hat{X}_1,...,\hat{X}_k$.\\\\
+
+\textbf{Nu benytter vi delta metoden} således
+\begin{align*}
+    Var(\hat{S}(u_k))=\nabla g^T\cdot Cov[\hat{p}_1,\ldots,\hat{p}_k]\nabla g
+\end{align*}
+Her bemærkes at pga ikke korrelerede $p$ så er $Cov[\hat{p}_1,\ldots,\hat{p}_k]$ blot en $k\times k$ diagonal matrice.
+\begin{align}
+\text{Cov}[\hat{p}_1, \dots, \hat{p}_k] = 
+\begin{bmatrix}
+\text{Var}(\hat{p}_1) & 0 & 0 & \dots  & 0 \\
+0 & \text{Var}(\hat{p}_2) & 0 & \dots  & 0 \\
+0 & 0 & \text{Var}(\hat{p}_3) & \dots  & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \dots  & \text{Var}(\hat{p}_k)
+\end{bmatrix}
+\end{align}
+
+Vi kigger nu på $g(\hat{p}_1,\ldots,\hat{p}_k)$ det kan vi omskrive til vha. logaritmen således at vi får 
+\begin{align}
+g\cdot \nabla log(g(\hat{p}_1,\ldots,\hat{p}_k)
+\end{align}
+dette medføre produktet bliver til en sum som er mere simpel at regne med.
+
+\begin{align}
+    g*\nabla log (g(\hat{p}_1, \dots, g(\hat{p}_k)) = g*\nabla \sum_{i=1}^k log(1-(\hat{p}_i) = g \sum_{i=1}^k \frac{\partial}{\partial \hat{p}_i} log (1-(\hat{p}_i)) = g *(\frac{-1}{1- \hat{p}_1}, \dots, \frac{-1}{1-\hat{p}_k})
+\end{align}
+vi indsætter på $\nabla g(\hat{p}_1, \dots, \hat{p}_k)$.\\
+
+\noindent Herfra kan det samlede resultat nu skrives op
+\begin{align}\label{matrix_delta}
+g\left[\frac{-1}{1- \hat{p}_1},\frac{-1}{1- \hat{p}_2}, \dots, \frac{-1}{1-\hat{p}_k}  \right]
+    \begin{bmatrix}
+\text{Var}(\hat{p}_1) & 0 & \dots  & 0 \\
+0 & \text{Var}(\hat{p}_2) & \dots  & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots  & \text{Var}(\hat{p}_k)
+\end{bmatrix}
+\begin{bmatrix}
+    \frac{-1}{1- \hat{p}_1}\\
+    \frac{-1}{1- \hat{p}_2}\\
+    \vdots \\
+    \frac{-1}{1- \hat{p}_k}\\
+\end{bmatrix} g
+\end{align}
+
+\noindent For at udregne $Var$ ved vi fra opgaven at 
+ $d_j|r(u_{j-1})\sim Bin(r(u_{j-1}),p_j)$ med dette i mente kan vi udregne $Var(p_j)$
+\begin{equation}
+    Var(p_j)=Var\left(\frac{d_j}{r(u_{j-1})}\right)
+\end{equation}
+Tager vi konstanten ud af variansen får vi
+\begin{equation}
+    \frac{1}{(r(u_{j-1}))^2}\cdot Var(d_j) =\frac{1}{(r(u_{j-1}))^2}\cdot r(u_{j-1})\hat{p}_j(1-\hat{p}_j) = \frac{\hat{p}_j(1-\hat{p}_j)}{r(u_{j-1})}
+\end{equation}
+\newline
+Udregner vi nu \ref{matrix_delta} får vi
+
+\begin{equation}
+    g^2\sum_{i=1}^k\left(\frac{-1}{(1-\hat{p}_i)}\right)*Var(\hat{p}_i)* \left(\frac{-1}{(1-\hat{p}_i)}\right)=g^2\sum_{i=1}^k\left(\frac{-1}{(1-\hat{p}_i)}\right)^2*Var(\hat{p}_i)
+\end{equation}
+Vi kigger nu på et enkelt element af summen
+\begin{equation*}
+    \left(\frac{-1}{ 1-\hat{p}_j }\right)^2 Var(\hat{p}_i)
+\end{equation*}
+
+efter at variasne er blevet udregnet kan vi indsætte det i formlen for et enkelt element 
+\begin{align}
+    \left(\frac{-1}{(1-\hat{p}_j)}\right)^2*Var(\hat{p}_j) &=  \left(\frac{-1}{(1-\hat{p}_j)}\right)^2\cdot \frac{\hat{p}_j(1-\hat{p}_j)}{r(u_{j-1})} &&= \frac{\hat{p}_j}{r(u_{j-1})(1-\hat{p}_j)} \\
+    = \frac{\frac{d_j}{r(u_{j-1})}}{r(u_{j-1})\cdot \left(1-\frac{d_j}{r(u_{j-1})}\right)} &= \frac{d_j}{r(u_{j-1})(r(u_{j-1})(1-\frac{d_j}{r(u_{j-1})})}&&=\frac{d_j}{r(u_{j-1})(r(u_{j-1})-d_j)}
+\end{align}
+sætter vi summen på og ændre $g$ til $S$ grundet \eqref{s_funktion} får vi 
+\begin{equation}
+     \hat{S}(u_k)^2\cdot \sum^k_{i=1}\frac{d_i}{r(u_{i-1})(r(u_{i-1})-d_i)}
+\end{equation}
+Dette giver det ønskede resultat og opgaven er færdiggjort 
+\newpage
+Tak til Marcus Basse, Jens Peter Østergaard Knudsen og Martin Husfeldt Andersen
+
+
+
+
+
+
+
+\begin{comment}
+\begin{align*}
+Var(log(\hat{p}_j))\approx\left(\frac{dlog(\hat{p}_j)}{d\hat{p}_j}\right)^2Var(\hat{p}_j)
+\end{align*}
+
+
+
+Kigger vi på dette udtryk opdelt så fås:
+\begin{align*}
+    \left(\frac{dlog(\hat{p}_j)}{d\hat{p}_j}\right)^2=\frac{1}{\hat{p}_j^2}
+\end{align*}
+og så skal variansen af $\hat{p}_j$ ganges på:
+\begin{align*}
+    Var(log(\hat{p}_j))\approx\frac{1}{\hat{p}_j^2}\cdot Var(\hat{p}_j).
+\end{align*}
+Vi mangler nu at undersøge $Var(\hat{p}_j)$ hvor $\hat{p}_j$  er en estimation for survival ved tiden $u_j$ som er en binomial distribution af fataliteter: $d_j|r(u_{j-1})\sim Bin(r(u_{j-1},p_j$ og dermed er variansen af $\hat{p}_j=1-\frac{d_j}{r(u_{j-1}}$ givet af binomial variansen på følgende måde:
+\begin{align*}
+    Var(\hat{p}_j)=\frac{p_j(1-p_j}{r(u_{j-1})}
+\end{align*}
+(variansen er givet som $Var(X) = np(1-p)$).\\\\
+\textbf{Vi kombinerer nu vores resultater:}
+\begin{align*}
+    Var(log(\hat{S}(u_k)))\approx\sum_{j=1}^k\frac{1}{\hat{p}_j^2}\cdot\frac{\hat{p}_j(1-\hat{p}_j)}{r(u_{j-1})}
+\end{align*}
+som forkortes til
+\begin{align*}
+    Var(log(\hat{S}(u_k)))\approx\sum_{j=1}^k\frac{1-\hat{p}_j}{r(u_{j-1})\hat{p}_j}.
+\end{align*}
+\textbf{Dette er dog et estimat af logaritmen til hvad vi ønsker} og derfor kan vi deltametoden på ny:
+\begin{align*}
+    Var(\hat{S}(u_k))\approx\hat{S}(u_k)^2\sum_{j=1}^k\frac{1-\hat{p}_j}{r(u_{j-1})\hat{p}_j}
+\end{align*}
+Dermed er den approksimerede varians af KM givet ved benyttelse af delta metoden.
+\end{comment}

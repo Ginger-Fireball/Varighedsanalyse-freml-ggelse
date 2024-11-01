@@ -1,0 +1,521 @@
+\chapter{Analysis}
+In this chapter the theory explained in the chapters above will be applied. The data retrieved from Energinet is processed using the software \textbf{R} which also has been used to construct the figures in the project. The data being used is the DK1 which covers Jylland and Fyn and all data points from the 1st of January 2014 until and including the 1st of January 2019. This period has been chosen since it seems fairly stable, where we avoid the COVID-19 outbreak and the energy crisis, this can be seen in Figure \ref{fig:Spot_prices_2014_2024}. 
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=1\columnwidth]{1 Formalities/Billeder/spotprices_2014_2024.png}
+    \caption{Electricity prices from 2014 to 2024}
+    \label{fig:Spot_prices_2014_2024}
+\end{figure}
+For a quick overview of the data the following table is given:
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Statistic} & {} \\
+\hline
+Minimum value & $-449.70$ kr. \\
+Maximum value & $1193.02$ kr. \\
+Mean & $229.99$ kr. \\
+Median & $221.22$ kr. \\
+St. deviation & $101.08$ kr. \\
+Nr. of observations & $43824$ \\
+Nr. of days & $1826$\\
+\hline
+\end{tabular}
+\caption{Overview of the data}
+\label{tab:summary_statistics}
+\end{table}
+
+\noindent Furthermore a density graph is plotted in Figure \ref{fig:observations_density} in order to see an overview of the spread of observations. Figure \ref{fig:observations_density} displays a somewhat normal distribution.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{1 Formalities/Billeder/Dataoverview.png}
+    \caption{Dencity graph of the data}
+    \label{fig:observations_density}
+\end{figure}
+\begin{comment}
+    sorted_data <- sort(spot_prices_data$records$SpotPriceDKK)
+
+# Plot the sorted data
+plot(sorted_data, type = "l", xlab = "Observation", ylab = "SpotPriceDKK", main = "Sorted SpotPriceDKK Data")
+
+# Estimate the probability density function (PDF) of the sorted data
+density_data <- density(sorted_data)
+
+# Plot the density
+plot(density_data, main = "", xlab = "SpotPriceDKK", ylab = "Density")
+
+# Add add datapoints
+rug(sorted_data, col = "blue", lwd = 0.5, side = 1)
+
+# Add mean line
+abline(v = 230, col = "red", lty = 1 , lwd = 3)
+
+# Legend
+legend("topright", legend = c("Mean", "Observations"), 
+       col = c("red", "blue"), lty = c(1, 1), lwd = c(3, 1))
+\end{comment}
+
+\section{Initial Data Cleaning}
+In this section the processing of our data, will be explained. Initially we make sure that there are no NA values since these will obstruct a lot of functions when processing the data. We do this using \textbf{R} and see that there are no NA values and therefore no data points which needs to be estimated or removed.\\
+To be able to use the time series functions in \textbf{R} then it is necessary to convert the data such that \textbf{R} reads it as a time index where we in addition add a column to the data named \textit{day} where the input is the mean spot price of each day, \textit{Daily\_mean}. It is now possible to construct a function \textit{SpotPrices}\_\textit{daily}\_\textit{ts} which is a time series with the \textit{Daily\_mean} data with day one being the 1st of January 2014. This data is plotted below in Figure \ref{fig:daily_data_ts}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{1 Formalities/Billeder/EL_priser_2014_2019.png}
+    \caption{Spot prices from 2014 to 2019}
+    \label{fig:daily_data_ts}
+\end{figure}
+\section{Model Decomposition}
+When creating a model we need to divide the data into two parts such that we have a training and a validation part, where $80\%$ is being used to model construction and $20\%$ which we eventually will validate the model on. Where each time series is named \textit{training\_ts} and \textit{validation\_ts} respectively.
+
+\noindent With the time series constructed we look into our training data, \textit{training\_ts}, which we want stationary. We use the ACF plot to check for stationarity.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{1 Formalities/Billeder/ACF_Pure_DATA.png}
+    \caption{ACF over training data}
+    \label{Fig:ACF_training_ts}
+\end{figure}
+\noindent The plot above clearly indicates that the data is non-stationary since there is no indication of the lags going towards 0 quickly. We furthermore run both the ADF and PP-test which contradicts the subjective interpretation of Figure \ref{Fig:ACF_training_ts} since they reject the null hypothesis indicating stationarity. Since we have opposite conclusions we use another unit root test (KPSS test) using \textbf{R} which, as the plot indicates, suggests non-stationarity. We choose to use the lag operator shown in Definition \ref{def:lag_operator} with respect to lag one in order to get a stationary time series. After taking the first lag another ACF plot of the differenced result is given. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{1 Formalities/Billeder/ACF_training_diff.png}
+    \caption{ACF over differenced training data}
+    \label{FIG:ACF_TRAINIONG_DIFF}
+\end{figure}
+\noindent This ACF plot still indicates non-stationarity, therefore an ACF plot with fewer lags is examined such that the structure is more clear. The next ACF plot only contains 60 lags and using such plot, weekly patterns stand out more clearly and allows us to determine whether the data contains seasonality and check if this is causing non-stationarity.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{1 Formalities/Billeder/ACF_train_diff_60_lags.png}
+    \caption{60 days ACF over differenced training data}
+    \label{fig:ACF_diff_ts_60}
+\end{figure}
+\noindent Looking at Figure \ref{fig:ACF_diff_ts_60} the spikes appearing every seventh lag indicates that our data contains weekly seasonality. To fix this issue the seventh lag is taken such that $Y=X_t-X_{t-7}$ is computed for all $t$. This differencing process leaves us with a new time series, \textit{residuals}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_stationary.png}
+    \caption{Plot over residuals}
+    \label{fig:Residuals_plotted}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{1 Formalities/Billeder/ACF_residuals_max.png}
+    \caption{ACF over the residuals}
+    \label{fig:long_ACF_residuals}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{1 Formalities/Billeder/residuals_ACF_lag_60.png}
+    \caption{60 days ACF over residuals}
+    \label{fig:60_day_ACF_residuals}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_PACF_lag_60.png}
+    \caption{60 days PACF over residuals}
+    \label{fig:60_day_PACF_residuals}
+  \end{subfigure}
+  \caption{Plots over time series \textit{residuals}}
+  %\label{}
+\end{figure}
+
+\noindent Four plots showing different computations of \textit{residuals} has been constructed and firstly looking at Figure \ref{fig:Residuals_plotted} then it seems to be deviating normally around $0$, which implies that it is stationary since (1.) in Definition \ref{DEF:weak_stat} is fulfilled. The first ACF plot shown in Figure \ref{fig:long_ACF_residuals} has a somewhat immediate cutoff which also indicates that the process is stationary and this conclusion is verified further when looking at Figure \ref{fig:60_day_ACF_residuals} since the correlation moves towards 0 rather quickly. Looking at \ref{fig:60_day_PACF_residuals} there is a strong correlation every seventh day which is to be expected, since the time series has been differenced with respect to lag seven. Using the three unit root tests from before we also conclude that all three now indicate stationarity.
+
+
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_diff_stationary.png}
+%     \caption{Plot over residuals\_diff}
+%     \label{fig:Residuals_diff_plotted}
+%   \end{subfigure}
+%   \begin{subfigure}[b]{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_diff_lag_max.png}
+%     \caption{ACF over the residuals\_diff}
+%     \label{fig:long_ACF_residuals_diff}
+%   \end{subfigure}
+
+%   \begin{subfigure}[b]{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_diff_ACF_lag_60.png}
+%     \caption{60 days ACF over residuals\_diff}
+%     \label{fig:60_day_ACF_residuals_diff}
+%   \end{subfigure}
+%   \begin{subfigure}[b]{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{1 Formalities/Billeder/Residuals_diff_PACF_lag_60.png}
+%     \caption{60 days PACF over residuals\_diff}
+%     \label{fig:60_day_PACF_residuals_diff}
+%   \end{subfigure}
+%   %\caption{Four subfigures arranged in a 2x2 grid}
+%   %\label{}
+% \end{figure}
+% \noindent The plots look similar to the ones for \textit{residuals}. The PACF 
+
+% \noindent The results of the three tests above all have a p-value which rejects the null hypothesis as stated before and therefore the series is now considered stationary\\
+
+\noindent
+With the above plots and tests above indicating a stationary time series we assume the series to be stationary and proceed to the next section.
+
+% With the time series constructed we now look into our training data \textit{training\_ts} which we want stationary. We use both the ADF and the PP-test explained in \ref{sec:unitroots} which both state that the series is stationary. This is although not expected when looking at the ACF plot in Figure \ref{fig:training_ts} seen below and also since factors such as inflation would influence the model to be non-stationary and therefore we also implement the KPSS unit root test which states, as expected, that the series is not stationary. 
+
+
+
+
+% We overcome this by using Definition \ref{def:lag_operator} to difference the series creating a new function \textit{training\_ts\_diff} which now leaves a stationary process according to all three tests.\\
+% Seasonality explained in \ref{Sec:ts_decom} is the next concern. The model must be decomposed such that there are no seasonality or trend left in the series. This is done using a $SARIMA$ (Defined in Definition 3.13 page 157 in \cite{Thirdedition_Time_series_analysis_and_its_application}) to find the seasonality in the model. After implementing the $SARIMA$ model the seasonal part is subtracted from our \textit{training\_ts\_diff} such that we are left with \textit{residuals}. \textit{residuals} are plotted below in Figure \ref{fig:res_ts_plot}.
+% \begin{figure}
+%     \centering
+%     \includegraphics{1 Formalities/Billeder/Residualsplot.png}
+%     \caption{Time series of the residuals}
+%     \label{fig:res_ts_plot}
+% \end{figure}
+% \section{Model construction}
+% The purpose of the two sections above is cleaning and refining the data such that 
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%  MODEL %%%%
+\section{Model Building}
+In this section we go through the construction of our models. We construct three different models, which are the $AR$ model, $ARMA$ model and $ARMA$-$GARCH$ model in order to see and compare how they forecast.
+
+
+
+\subsection{AR Model}\label{subs:AR-model}
+We start off by constructing an $AR$ model. We first determine the order of lags hence determining what value $p$ should have. The Akaike Information Criterion (AIC) is used to determine the value of $p$ hence we choose the model with the lowest AIC score. The AIC score is calculated as
+\begin{align*}
+    \text{AIC}=-2ln(L)+2k,
+\end{align*}
+where $L$ is the maximised value of the likelihood function corresponding to the model and $k$ is the number of parameters. Hence an increase in parameters penalises the model such that if two models have the same explanation, then the model with fewest parameters is favoured.\\\\
+\noindent Another way of choosing the best fitting model would be using the Bayesian Information Criterion (BIC) which is calculated as 
+\begin{align*}
+    \text{BIC}=-2ln(L)+ln(n)\cdot k,
+\end{align*}
+where $k$ and $L$ is the same as in the AIC and $n$ is the sample size. The reason for our choosing is that the BIC is preferred when the true model is expected to be within the constructed models. This is although far from the case when dealing with electricity prices since the exact price is way too unpredictable and therefore we seek a model that approximates the prices rather than modelling the exact prices. The BIC has although an advantage since its penalising parameter is stronger than the AIC, this could be desired for a multitude of reasons where the most important is that it is undesired to have a model with too many parameters, since this leads to over fitting. 
+Even though the above is important we use the AIC to choose our models since the true model is not among the constructed.
+Before using the AIC we subjectively determine a maximum lag by looking at the PACF in Figure \ref{fig:60_day_PACF_residuals}, where we determine four to be the maximum amount of lags. \textbf{R} is used to calculate the AIC score for \textit{residuals\_ts}, which is a time series constructred from the data \textit{residuals} and we find that the best possible model is an $AR(4)$ model. \\\\
+\noindent With an $AR(4)$ model constructed we now evaluate its ability to forecast electricity prices. The forecasts are made using this model with the \textbf{R} function "forecast", which is a specific function when dealing with a time series, but since these predictions are not actual predicted electricity prices (due to the difference being taken earlier), we therefore have to transform the values back into electricity prices. This is done by inverse differencing, with respect to lag seven and then with respect to lag one, using an \textbf{R} function called "diffinv". These operations gives the predictions for the electricity prices.
+\noindent We choose our first prediction as an example and plot the predictions made versus the actual values taken from the validation data in Figure \ref{fig:AR_model_with_predictions} we get the function
+\begin{align*}
+    X_t=-0.2989X_{t-1}-0.2511X_{t-2}-0.1473X_{t-3}-0.0531X_{t-2}+0.0787+\varepsilon_t.
+\end{align*}
+The predictions are far from perfect and deviate quite a lot from the actual values. This pattern continues and, as time passes, the quality of predictions falters even more. The exact values in the example is shown in Table \ref{tab:AR_two_rows}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/AR_model_Pre.png}
+    \caption{Graph over predicted and actual values for the $AR(4)$ model}
+    \label{fig:AR_model_with_predictions}
+\end{figure}
+
+\begin{table}[H]
+  \centering  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+   $AR$ Model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Actual Values & 163.07 & 228.30 & 156.42 & 260.16 & 267.20 \\
+    \hline
+    Predicted Values &  234.82& 151.03& 345.70& 377.24& 353.21\\
+    \hline
+
+  \end{tabular}
+  \caption{Predicted and actual values for the $AR(4)$ model}
+  \label{tab:AR_two_rows}
+\end{table}
+
+\noindent The general predictability of the graph is although way more relevant than a single example hence we introduce the next tabular in Table \ref{tab:AR_mean_prediction_error} where the mean prediction error for the first five days is given together with the percentage error. Clearly, the further into future the model predicts, the more inaccurate it becomes. 
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+   $AR$ model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Mean prediction error & 52.07 & 66.92 & 75.046 & 79.82 & 85.63   \\
+    \hline
+    Percentage error & 18.21\% & 23.31\% & 26.06\% & 27.60\% & 29.52\%  \\
+    \hline
+    
+  \end{tabular}
+  \caption{Mean prediction error for $AR(4)$ model}
+  \label{tab:AR_mean_prediction_error}
+\end{table}
+\noindent The one-day-ahead prediction is another way of analysing the quality of the model. The definition of such prediction is that the model, each day, knows the actual previous values before predicting tomorrow's value. This reoccurs the next day where the actual value is known to the model before predicting the next upcoming day. The one-day-ahead predictions plotted against the actual values can be seen in Figure \ref{fig:One_day_ahead_AR}, here the graphs looks to be, in general, far from accurate.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/One_day_ahead_AR.png}
+    \caption{One-day-ahead predictions for $AR(4)$ model}
+    \label{fig:One_day_ahead_AR}
+\end{figure}
+
+\noindent Figure \ref{fig:One_day_ahead_AR} can be a little difficult to interpret, therefore the one-step-ahead residuals are plotted in Figure \ref{fig:Residuals_One_step_AR}, where it can be seen that the error is quite remarkably at times.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{1 Formalities/Billeder/Residuals_One_step_AR.png}
+    \caption{Residuals One-step-ahead $AR(4)$ model}
+    \label{fig:Residuals_One_step_AR}
+\end{figure}
+\noindent In the plot below, Figure \ref{fig:Histogram_residuals_AR_model}, the residuals and the frequency thereof is plotted in a histogram. It can clearly be seen that generally the smaller errors are more frequent and oppositely the large errors more infrequent, furthermore there seems to be a significant drop in frequency at $50$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/Histo_AR_residuals.png}
+    \caption{Histogram over the residuals $AR(4)$ model}
+    \label{fig:Histogram_residuals_AR_model}
+\end{figure}
+\subsection{ARMA Model}
+The next model we want to construct is the $ARMA(p,q)$ model. This model includes a moving average parameter and hence is slightly more complicated. We start off by determining the maximum amount of lags by interpreting the ACF in Figure \ref{fig:60_day_ACF_residuals} and PACF in Figure \ref{fig:60_day_PACF_residuals}. As before the maximum amount of lags for the $AR$ part is determined by inspecting the PACF and should be four. Next the ACF plot is inspected where we determine the maximum amount of lags to be nine.\\
+\noindent The AIC values are computed for the $ARMA$ model for all possible combinations of $(p,q)$ (inside the spectrum of our lag maxes) and the model with the lowest AIC score is chosen, which is an $ARMA(1,8)$ model. Thereafter predictions and the transformation thereof are made in the same way as for the $AR$ model. An example of a prediction plotted against actual values can be seen in Figure \ref{fig:ARMA_model_with_predictions} where we get the function
+\begin{align*}
+     X_t=&0.5737X_{t-1}-0.9732\varepsilon_{t-1}+0.0072\varepsilon_{t-2}-0.0040 \varepsilon_{t-3}\\
+     -&0.0011\varepsilon_{t-4}+0.0067\varepsilon_{t-5}-0.0032\varepsilon_{t-6}-0.9783\varepsilon_{t-7}+0.9461\varepsilon_{t-8}+\varepsilon_t.
+\end{align*}
+Here it can be seen that the first prediction looks to be far off, whereas the second prediction looks to be pretty close, this can also be verified in Table \ref{tab:ARMA_two_rows} where values for the first five days can be seen. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/ARMA_model_predict.png}
+    \caption{Graph over predicted and actual values for the $ARMA(1,8)$ model}
+    \label{fig:ARMA_model_with_predictions}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    $ARMA$ model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Actual Values & 163.07 & 228.30 & 156.42 & 260.16 & 267.20 \\
+    \hline
+    Predicted Values &  219.24 & 224.20 & 233.30 & 220.04 & 220.03 \\
+    \hline
+  \end{tabular}
+  \caption{$ARMA(1,8)$ model predicted against actual values}
+  \label{tab:ARMA_two_rows}
+\end{table}
+
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{1 Formalities/Billeder/ARMA_model_with_Confiden.png}
+%     \caption{$ARMA$ model with confidence intervals}
+%     \label{fig:ARMA_model_confidence_interval}
+% \end{figure}
+\noindent Again as in the subsection above this graph and table is just an example, therefore the mean prediction error is calculated which is done the same way as for the $AR$ model. In Table \ref{tab:ARMA_mean_prediction_error} it can be seen that the mean prediction error for the first day is 34.92 DKK and afterwards the error becomes larger as expected.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    $ARMA$ model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Mean prediction error & 34.92 & 44.97 & 46.94 & 48.30 & 49.43  \\
+    \hline
+    Percentages error & 12.21\% & 15.67\% & 16.31\% & 16.70\% & 17.04\%  \\
+    \hline
+    
+  \end{tabular}
+  \caption{$ARMA(1,8)$ model mean prediction error}
+  \label{tab:ARMA_mean_prediction_error}
+\end{table}
+\noindent In Figure \ref{fig:One_day_ahead_ARMA} the one-day-ahead predictions are plotted against the actual values. It can be seen that the predictions follows the actual values somewhat, to get at better look at the error of the predictions the residuals are plotted in Figure \ref{fig:Residuals_One_step_ARMA}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/One_day_ahead_ARMA.png}
+    \caption{One-day-ahead predictions $ARMA(1,8)$ model}
+    \label{fig:One_day_ahead_ARMA}
+\end{figure}
+\noindent In the plot below it can be seen that, the residuals are at times very small and therefore the predictions are close to the actual value and at other times the prediction is very far from the actual value.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{1 Formalities/Billeder/Residuals_One_step_ARMA.png}
+    \caption{Residuals One-step-ahead $ARMA(1,8)$ model}
+    \label{fig:Residuals_One_step_ARMA}
+\end{figure}
+\noindent In the plot below, Figure \ref{fig:Histogram_residuals_ARMA_model}, the residuals and the frequency thereof is plotted in a histogram. It can clearly be seen that generally the smaller errors are more frequent and oppositely the large errors more infrequent. At $60$ the frequency seems to drop down to just a couple at each interval.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/Histo_ARMA_residuals.png}
+    \caption{Histogram over the residuals $ARMA(1,8)$ model}
+    \label{fig:Histogram_residuals_ARMA_model}
+\end{figure}
+
+
+
+
+% Just like the AR model, the lags are first determined, this is done by an \textbf{R} function called "selec", which states we should use five lags for both the AR and MA parts. Thereafter predictions and the transformation thereof are made in the same way as for the AR model. The predictions are then plotted against actual values in Figure (REF). Looking at the plot, it looks like the fir couple of predictions are close to the actual value, which is verified by the table where it can be seen that the first two predictions are with 10\% of the actual value. Thereafter just like the AR model it starts to deviate from the actual values, however, it does follow the ups and downs a bit better.
+
+\subsection{ARMA-GARCH Model}
+The lags for the $ARMA$-$GARCH$ model are determined similarly as before. The lags for the $ARMA$ part are chosen to be the same as for the $ARMA$ model which is $(1,8)$. Thereafter the AIC is used to determine the lags for the $GARCH$ part, which turns out to be $(1,6)$. The predictions are made and then transformed back the same way as for the $AR$ and $ARMA$ models. An example of predictions against actual values is plotted in Figure \ref{fig:ARMA_GARCH_model_with_predictions} and the parameters for the model is shown in Table \ref{tab:params}.
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+Parameter & Value &Parameter & Value\\
+\hline 
+$AR_1$ & $5.81 \times 10^{-1}$ &$\alpha_1$ & $1.80 \times 10^{-1}$ \\
+$MA_1$ & $-9.54 \times 10^{-1}$ &$\beta_1$ & $2.18 \times 10^{-1}$ \\
+$MA_2$ & $6.68 \times 10^{-3}$ &$\beta_2$ & $1.48 \times 10^{-6}$ \\
+$MA_3$ & $8.89 \times 10^{-3}$ &$\beta_3$ & $4.14 \times 10^{-7}$ \\
+$MA_4$ & $-4.08 \times 10^{-3}$ &$\beta_4$ & $2.88 \times 10^{-1}$ \\
+$MA_5$ & $2.95 \times 10^{-3}$  &$\beta_5$ & $2.89 \times 10^{-1}$ \\
+$MA_6$ & $-5.49 \times 10^{-3}$ &$\beta_6$ & $1.78 \times 10^{-6}$ \\
+$MA_7$ & $-9.27 \times 10^{-1}$ &$\alpha_0$ & $6.32 \times 10^{1}$ \\
+$MA_8$ & $8.79 \times 10^{-1}$ & Intercept & $9.48 \times 10^{-4}$ \\
+\hline
+\end{tabular}
+\caption{Parameter Values for the $ARMA(1,8)$-$GARCH(1,6)$}
+\label{tab:params}
+\end{table}
+It can be seen that it somewhat resembles the $ARMA$ model.
+
+% \begin{table}[H]
+%   \centering
+%   \label{tab:two_rows}
+%   \begin{tabular}{|c|c|c|c|c|c|}
+%     \hline
+%     ARMA Model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+%     \hline
+%     Actual Values & 163.0671 & 228.3046 & 156.4217 & 260.1642 & 267.1975 \\
+%     \hline
+%     Predicted Values &  180.4645 & 237.6221 & 311.8200 & 369.8732 & 389.0360 \\
+%     \hline
+%   \end{tabular}
+%   \caption{ARMA model predicted vs actual}
+% \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/ARMAGARCH_prediction.png}
+    \caption{Graph over predicted and actual values for the $ARMA(1,8)$-$GARCH(1,6)$ model}
+    \label{fig:ARMA_GARCH_model_with_predictions}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+     $ARMA$-$GARCH$ model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Actual Values & 163.07 & 228.30 & 156.42 & 260.16 & 267.20 \\
+    \hline
+    Predicted Values &   227.93 & 218.93 & 229.70 & 207.60 & 212.94 \\
+    \hline
+  \end{tabular}
+  \caption{$ARMA(1,8)$-$GARCH(1,6)$ model predicted vs actual}
+  \label{tab:ARMA_GARCH_two_rows}
+\end{table}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{1 Formalities/Billeder/ARMAGARCH_pred_interval.png}
+%     \caption{ARMA model with confidence intervals}
+%     \label{fig:ARMA_GARCH_model_confidence}
+% \end{figure}
+
+\noindent Like before the graph and tabular are just examples and, as in the other two models, the mean prediction errors are calculated in order to be able to evaluate the model. In Tabular \ref{tab:ARMA_GARCH_mean_prediction_error} it can again be seen that the accuracy of predictions falters the further into the future the model predicts.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    $ARMA$-$GARCH$ model & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    Mean prediction error & 34.96 & 44.85 & 46.64 & 47.40 & 48.15  \\
+    \hline
+    Percentage error & 12.23\% & 15.62\% & 16.20\% & 16.39\% & 16.60\%   \\
+    \hline    
+  \end{tabular}
+  \caption{$ARMA(1,8)$-$GARCH(1,6)$ model mean prediction error}
+  \label{tab:ARMA_GARCH_mean_prediction_error}
+\end{table}
+\noindent 
+\noindent In Figure \ref{fig:One_day_ahead_ARMAGARCH} the one-day-ahead predictions are plotted against the actual values. It can be seen that the predictions follows the actual values most of the time, however to get at better look at the error of the predictions the residuals are plotted in Figure \ref{fig:Residuals_One_step_ARMAGARCH}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/One_day_ahead_ARMAGARCH.png}
+    \caption{One-day-ahead $ARMA(1,8)$-$GARCH(1,6)$ model}
+    \label{fig:One_day_ahead_ARMAGARCH}
+\end{figure}
+\noindent In the plot below the residuals can be seen. The graph looks quite similar to Figure \ref{fig:Residuals_One_step_ARMA}, where the predictions at times are close to the actual value, but at other times off by a lot.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{1 Formalities/Billeder/Residuals_One_step_ARMAGARCH.png}
+    \caption{Residuals One-step-ahead $ARMA(1,8)$-$GARCH(1,8)$ model}
+    \label{fig:Residuals_One_step_ARMAGARCH}
+\end{figure}
+\noindent In the plot below, Figure \ref{fig:Histogram_residuals_ARMA_GARCH_model}, the residuals and the frequency thereof is plotted in a histogram. It can clearly be seen that generally the smaller errors are more frequent and oppositely the large errors more infrequent. Furthermore there looks to be an almost linear tendency in the decrease of frequency moving up the interval of the residuals.
+
+\begin{comment}
+            mu           ar1           ma1           ma2           ma3           ma4 
+ 9.482875e-04  5.799823e-01 -9.536230e-01  6.682205e-03  8.892152e-03 -4.077005e-03 
+          ma5           ma6           ma7           ma8         omega        alpha1 
+ 2.952357e-03 -5.486665e-03 -9.265872e-01  8.785459e-01  6.315973e+01  1.797387e-01 
+        beta1         beta2         beta3         beta4         beta5         beta6 
+ 2.178421e-01  1.480322e-06  4.143257e-07  2.882261e-01  2.885443e-01  1.781170e-06 
+
+\end{comment}
+
+\begin{equation*}
+    
+\end{equation*}
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{1 Formalities/Billeder/Histo_ARMAGARCH_residuals.png}
+    \caption{Histogram over the residuals $ARMA(1,8)$-$GARCH(1,6)$ model}
+    \label{fig:Histogram_residuals_ARMA_GARCH_model}
+\end{figure}
+
+\section{Comparison}\label{sect:comp}
+With the three models constructed and analysed, it is of interest to compare them, to see if the more complex models provide better predictions. The value of interest is the mean prediction error. It can be seen that the $AR(4)$ model has a one-day-ahead mean prediction error of $52.07$ DKK which is an $18.21\%$ error shown in Table \ref{tab:AR_mean_prediction_error}. In fact the $AR$ model is the model with the highest mean error for all day-ahead predictions, which is to be expected given the complexity of predicting electricity prices. \\
+\noindent The $ARMA(1,8)$ model's one-day-ahead prediction error is $34.92$ DKK with an $12.21\%$ error which unexpectedly is the model with the lowest mean prediction error for the one-day-ahead since the $ARMA(1,8)$-$GARCH(1,6)$ model has a $34.96$ DKK mean prediction error. The difference between these two values are although quite insignificant and, since the $ARMA(1,8)$-$GARCH(1,6)$ model is the best model for day two to day five, then we consider the $ARMA(1,8)$-$GARCH(1,6)$ model to be the best model at forecasting electricity prices. A plot where all one-day-ahead predictions are shown against the actual values can be seen in Figure \ref{fig:One_step_pred}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{1 Formalities/Billeder/Com_plot_all_pred.png}
+    \caption{One-day-ahead predictions for each model and actual values}
+    \label{fig:One_step_pred}
+\end{figure}
+\noindent Although this plot is a little unmanageable there are some clear patterns which are of interest. One of these is the inaccuracy of the $AR$ model which fluctuates way more than both the actual values and the two other models. Furthermore it can be seen that the $ARMA$ model and the $ARMA$-$GARCH$ model follow each other closely and also gives a relative approximation of the actual value even though some big fluctuations are missed out. All in all both the $ARMA$ model and the $ARMA$-$GARCH$ model gives a somewhat accurate one-day-ahead prediction which is also reflected in Table \ref{tab:ARMA_mean_prediction_error} and Table \ref{tab:ARMA_GARCH_mean_prediction_error}.\\
+Another way of comparing them is by looking purely at the direction of the prediction. For the one-day-ahead predictions, the $AR$ model predicts the correct direction in which the electricity price moves $50\%$ of the time. For the $ARMA$ and $ARMA$-$GARCH$ model, it is $57\%$ and $57.5\%$ respectively. This means the $ARMA$-$GARCH$ model is most efficient at predicting if the price moves up or down.
+\begin{figure}[H]
+    \centering
+    \includegraphics{1 Formalities/Billeder/Residuals_One_step_COmbined.png}
+    \caption{One-day-ahead residuals for each model}
+    \label{fig:Residuals_One_step_Combined}
+\end{figure}
+\noindent In Figure \ref{fig:Residuals_One_step_Combined} the one-step-ahead residuals for each model is plotted in the same graph against the actual values. It can be seen that the $AR$ model seem to be the one deviating both the most often and the most on each day. The $ARMA$ model and $ARMA$-$GARCH$ model do seem to be quite close to each other, deviating roughly the same amount. They are both however much closer to the actual value compared to the $AR$ model. 
+
+\begin{table}[H]
+    \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+   Mean prediction error & Day 1 & Day 2 & Day 3 & Day 4 & Day 5 \\
+    \hline
+    $AR$ model& 52.07 & 66.92 & 75.046 & 79.82 & 85.63   \\
+    \hline
+   $ARMA$ model& 34.92 & 44.97 & 46.94 & 48.30 & 49.43  \\
+    \hline
+    $ARMA$-$GARCH$ model & 34.96 & 44.85 & 46.64 & 47.40 & 48.15  \\
+    \hline
+  \end{tabular}
+  \caption{Model of all mean prediction error}
+\label{tab:combi_mean_prediction_error}
+\end{table}
+\noindent A combined table is constructed in Table \ref{tab:combi_mean_prediction_error} where the mean prediction errors are lower for the $ARMA$ and $ARMA$-$GARCH$ compared to the $AR$ model.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\columnwidth]{1 Formalities/Billeder/hist_comb.png}
+    \caption{Gathered residual histogram for all models} \label{fig:Histogram_residuals_combi_model}
+\end{figure}
+\noindent Finally a combination of the histograms above has been made. Figure \ref{fig:Histogram_residuals_combi_model} above is constructed such that all the residual values from $[0;10]$ in the three different models corresponds to the first three columns, this also occurs for $]10;20]$ and so on. Figure \ref{fig:Histogram_residuals_combi_model} shows how the $ARMA$-$GARCH$ model has the best predictions with most residuals lying in the first interval.
+
+

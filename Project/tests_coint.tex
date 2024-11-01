@@ -1,0 +1,71 @@
+\chapter{Co-integration tests}
+This section is based on \cite{Analysis_of_integrated_and_cointegrated_time_series_with_R} and \cite{Engle_grang_test}.\\\\
+\noindent As explained in Chapter \ref{chap:Coint} when two non-stationary variables shares a stationary linear combination in the long run there exists a co-integration vector $\b{\alpha}$. We have considered these movements earlier where we used an error correction model to ensure that even though there might be short run deviations from this equilibrium then they are still co-integrated. There are multiple ways of estimating the co-integrating vector $\b{\alpha}$ and one of them was introduced by Engle and Granger in 1987 \cite{co-Integration_and_error_correction}.
+\section{Engle and Granger test}
+Engle and Granger formulated a two-step estimation technique and in this project the variables of interest are $I(1)$ and therefore this is only considered, even though sufficient theory of the general issue of $I(d)$ does exist. \\
+\indent\indent \textbf{1.}\\ 
+Firstly each time series is examined to ensure they are $I(1)$. Next we use the $I(1)$ variables e.g. $x_{1,t},x_{2,t},\ldots,x_{N,t}$. The vector $\b{x}_t$ with $N$ entries is then used in a co-integration regression where each entry is regressed by a linear combination of the other entries:
+\begin{align*}
+    x_{t,1}=\alpha_1+u_t+\sum^N_{j=2}\alpha_j x_{t,j}
+\end{align*}
+where a vector with the coefficients is given as $\b{\hat{\alpha}}=[1, -\hat{\alpha}_1,\ldots-\hat{\alpha}_N]^T$ and we know from \ref{Def:Co-integrated of order d,b} that $z_t=\b{\alpha}^T\b{x}_t$ and therefore $\b{\hat{\alpha}}$ is then obtained by using OLS. This leaves us with
+\begin{align}\label{eq:z hat_t}
+    \hat{z}_t[1, \b{x}_t]^T\hat{\b{\alpha}}_t^T=x_{1,t}-\hat{\alpha}_{1}-\hat{\alpha}_{2}x_{t,2}-\cdots-\hat{\alpha}_{N}x_{t,N}.
+\end{align}
+When having obtained $\hat{z}_t$ in \eqref{eq:zhat_t} then one may check whether if $\hat{z}_t$ is $I(1)$. This can be done using the DF (or ADF) but since $\hat{z}_t$ is an estimate other critical values are needed which are found in Engle and Yoo [1987]. A hypothesistest is then constructed with
+\begin{align*}
+    \b{H_0}:\text{ No co-integration. Hence }\hat{z}_t\text{ is non-stationary and is therefore }I(1)\\ \b{H_1}:\text{ If the null-hypothesis is rejected then }x_1,x_2,\ldots x_n \text{ is co-integrated.}
+\end{align*}
+When the null hypothesis has been rejected the it is possible to proceed to the next step.\\\\
+\indent\indent \textbf{2.}\\
+In the second step we restrict the problem to a bivariate case. Considering the two $I(1)$ variables $x_{1,t}$ and $x_{2,t}$ we construct an error correction model for each as follows:
+\begin{align*}
+    \Delta x_{1,t}=\psi_0+\gamma_1\hat{z}_{t-1}+\sum^K_{i=1}\psi_{1,i}\Delta x_{1,t-i}+\sum^L_{i=1}\psi_{2,i}\Delta x_x_{2,t-i}+\varepsilon_{1,t}\\
+    \Delta x_{2,t}=\xi_0+\gamma_2\hat{z}_{t-1}+\sum^K_{i=1}\xi_{1,i}\Delta x_{2,t-i}+\sum^L_{i=1}\xi_{2,i}\Delta x_{1,t-i}+\varepsilon_{2,t}.
+\end{align*}
+
+
+
+
+\section{Granger}
+\begin{equation*}
+    (1-B)x_t=C(B)\varepsilon_t
+\end{equation*}
+\begin{thm}{Granger Representation Theorem}
+    Given the vector $x_t$ which is $\mathbf{N} \times 1$ is co-integrated with $d,b=1$ and with co-integrating rank $r$ then:
+    \begin{itemize}
+        \item $C(1)$ is of rank $\mathbf{N}-r$
+        \item There exists a vector ARMA representation
+    \end{itemize}
+    \begin{equation}
+        A(B)x_t=d(B)\varepsilon_t
+    \end{equation}
+    with the properties that $A(1)$ has rank r and $d(B)$ is a scalar lag polynomial with $d(1)$ finite and $A(0)=I_\mathbf{N}$. when $d(B)=1$ this is a vector autoregression.
+    \begin{itemize}
+        \item There exist $\mathbf{N}\times r$ matrices $\alpha, \gamma$ of rank r such that $\alpha'C(1)=0,C(1)\gamma=0,A(1)=\gamma\alpha'$
+        \item There exists an error correction representation with $z_t=\alpha'x_t,$ an $r\times1$ vector of stationary random variables:
+    \end{itemize}
+    \begin{equation}
+        A*(B)(1-B)x_t=\gamma z_{t-1}+d(B)\varepsilon_t
+    \end{equation}
+    with $A*(0)=I_{\mathbf{N}}$
+    \begin{itemize}
+        \item The vector $z_t$ is given by 
+    \end{itemize}
+    \begin{align*}
+        z_t=K(B)\varepsilon_t, \\
+        (1-B)z_t=-\alpha'\gammaz_{t-1}+J(B)\varepsilon_t
+    \end{align*}
+    where K(B) is an $r\times \mathbf{N}$ matrix of lag polynomials given $\alpha'C*(B)$ with all elements of $K(1)$ finite with rank $r$ and $det(\alpha'\gamma)>0$
+    \begin{itemize}
+        \item if a finite vector autoregressive representation is possible, it will have the form given by the first eq and the second eq given above with $d(B)=1$ and both $A(B)$ and $A*(B)$ as matrices of finite polynomials.
+    \end{itemize}
+\end{thm}
+\begin{lemma}{to prove}
+    if $G(\lambda)$ is a finite valued $\mathbf{N}\times\mathbf{N}$ matrix polynomial on $\lambda\in[0,1]$ with rank $G(0)=\mathbf{N}-r$ for $0\leq r\leq \mathbf{N}$, and if $G*(0)\neq0$ in $G(\lambda)=G(0)+\lambdaG*(\lambda)$ then
+    \begin{align}
+        det(G(\lambda))=\lambda^{r}g(\lambda)I_{\mathbf{N}}\intertext{with $g(0)$ finite}\\
+        Adj(G(\lambda))=\lambda^{r-1}H(\lambda)
+    \end{align}
+    where $I_{\mathbf{N}}$ is the $\mathbf{N}\times\mathbf{N}$ identity matrix, $1\leq$ rank $(H(0))\leqr$ and $H(0)$ is finite
+\end{lemma}

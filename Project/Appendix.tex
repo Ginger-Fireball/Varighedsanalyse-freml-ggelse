@@ -1,0 +1,18 @@
+\section{Appendix}
+\begin{setn}[Appendix]\label{setn:Wold}
+    Any covariance stationary process with mean zero can be represented in the form
+    \begin{align*}
+        x_t-\mu=\sum^\infty_{j=0}\psi_j\varepsilon_{t-j}=\psi(L)\varepsilon_t
+    \end{align*}
+    where $\varepsilon_t\sim WN(0,\sigma^2)$, $\sum^\infty_{j=0}\psi^2_j<\infty$ and $\psi_0=1$.
+\end{setn}
+This will not be proven.\\\\
+The vector autoregressive model for the $p$-dimensional process $\bx_t$ also denoted VAR$(p)$ is a dynamic stochastic model for all variables in $x_t$ and is given as:
+\begin{align*}
+    \Delta\bx_t=\Pi\bx_t{t-1}\sum^{k-1}_{i=1}\Gamma_t\Delta\bx_{t-i}+\Phi d_t+\varepsilon_t.
+\end{align*}
+We assume the errors $\varepsilon_t$ to be i.i.d with mean zero and variance $\Omega$. $d_1,\ldots,d_t$ are deterministic terms such as constants, linear terms, seasonal components or intervention dummies. In order to examine the properties regarding $x_t$ the characteristic polynomial is given as
+\begin{align*}
+    \Pi(z)=(1-z)I_p-\Pi z-(1-z)\sum^{k-1}_{i=1}\Gamma_iz z^i \:\:\text{with determinant}\:\: det(\Pi(z))=|\Pi(z)
+\end{align*}
+and degree of maximum $kp$. Let $\rho_i^{-1}$ be the roots of 
