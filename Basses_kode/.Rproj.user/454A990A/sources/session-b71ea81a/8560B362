@@ -3,24 +3,24 @@
     "path": "~/GitHub/Varighedsanalyse-freml-ggelse/Basses_kode/Mini_project_varighedsanalyse.R",
     "project_path": "Mini_project_varighedsanalyse.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "1989551511",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1730458605108.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "81,2",
-        "scrollLine": "72"
+        "cursorPosition": "122,8",
+        "scrollLine": "114"
     },
     "folds": "",
-    "lastKnownWriteTime": 1730458887,
+    "lastKnownWriteTime": 1730463063,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1730461991986,
+    "last_content_update": 1730463063059,
     "read_only": false,
     "read_only_alternatives": []
 }

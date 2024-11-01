@@ -18,6 +18,7 @@ summary(df_melanoma30)
 # Boxplots for continuous variables
 continuous_vars <- c("time", "thickness", "age", "logthick")
 for (var in continuous_vars) {
+  pdf(paste("Billeder_duration/Boxplot_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
     geom_boxplot() +
     ggtitle(paste("Boxplot of", var)) +
@@ -26,10 +27,12 @@ for (var in continuous_vars) {
     xlab(var) +
     ylab("Values") -> plot
   print(plot)
+  dev.off()
 }
 
 # Histogram and density plot for continuous variables
 for (var in continuous_vars) {
+  pdf(paste("Billeder_duration/Histogram_and_Density_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
     geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
     geom_density(aes(y = ..density.. * max(..count..)), color = "red") +
@@ -38,6 +41,7 @@ for (var in continuous_vars) {
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab(var) -> plot
   print(plot)
+  dev.off()
 }
 
 # Calculate skewness for continuous variables
@@ -49,6 +53,7 @@ lapply(df_melanoma30[categorical_vars], table)
 
 # Bar plots for categorical variables
 for (var in categorical_vars) {
+  pdf(paste("Billeder_duration/Bar_plot_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
     geom_bar(fill = "lightblue", color = "black") +
     ggtitle(paste("Bar plot of", var)) +
@@ -56,6 +61,7 @@ for (var in categorical_vars) {
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab(var) -> plot
   print(plot)
+  dev.off()
 }
 
 # Opgave 3: Kaplan-Meier Survival Analysis
@@ -73,6 +79,7 @@ survival_object <- Surv(df_melanoma30$time, df_melanoma30$dead)
 fit <- survfit(survival_object ~ thickness_cat, data = df_melanoma30)
 
 # Plot Kaplan-Meier survival curves
+pdf("Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf")
 ggsurvplot(fit, data = df_melanoma30, 
            pval = TRUE, # Adds p-value from log-rank test
            conf.int = TRUE, # Adds confidence intervals
@@ -80,7 +87,7 @@ ggsurvplot(fit, data = df_melanoma30,
            ggtheme = theme_minimal(), 
            palette = "Dark2",
            title = "Kaplan-Meier Survival Curves by Tumor Thickness Categories")
-
+dev.off()
 # Perform the log-rank test
 log_rank_test <- survdiff(survival_object ~ thickness_cat, data = df_melanoma30)
 log_rank_test
@@ -96,21 +103,24 @@ martingale_residuals <- residuals(cox_model, type = "martingale")
 df_melanoma30$martingale_residuals <- martingale_residuals
 
 # Plot martingale residuals against 'age'
+pdf("Billeder_duration/Martingale_Residuals_vs_Age.pdf")
 ggplot(df_melanoma30, aes(x = age, y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +
   ggtitle("Martingale Residuals vs Age") +
   xlab("Age") +
   ylab("Martingale Residuals")
+dev.off()
 
 # Plot martingale residuals against 'thickness'
+pdf("Billeder_duration/Martingale_Residuals_vs_Tumor_Thickness.pdf")
 ggplot(df_melanoma30, aes(x = thickness, y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +
   ggtitle("Martingale Residuals vs Tumor Thickness") +
   xlab("Tumor Thickness") +
   ylab("Martingale Residuals")
-
+dev.off()
 # Fit models with log-transformed age and thickness
 cox_model_log <- coxph(Surv(time, dead) ~ log(age) + log(thickness) + epicell + ici + ulceration + sex + invas2, data = df_melanoma30)
 summary(cox_model_log)
