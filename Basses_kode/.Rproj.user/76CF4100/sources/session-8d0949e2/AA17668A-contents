@@ -1,19 +1,19 @@
-load("C:/Users/jensp/Downloads/melanoma30.RData")
-
-
+# Load required libraries
 library(ggplot2)
 library(survival)
 library(KMsurv)
 library(survminer)
 library(moments)
 
+#stor tissemand
+# Load the data
+load("/Users/marcusbassepedersen/R-code/melanoma30.RData")
 df_melanoma30 <- melanoma30
 
-# View the first few rows and structure
+# View the first few rows and structure of the dataset
 head(df_melanoma30)
 str(df_melanoma30)
 summary(df_melanoma30)
-
 
 # Boxplots for continuous variables
 continuous_vars <- c("time", "thickness", "age", "logthick")
@@ -40,15 +40,11 @@ for (var in continuous_vars) {
   print(plot)
 }
 
-
 # Calculate skewness for continuous variables
 sapply(df_melanoma30[continuous_vars], skewness, na.rm = TRUE)
 
-
 # Table of frequencies for categorical variables
 categorical_vars <- c("status", "dead", "ici", "epicell", "ulceration", "sex", "invas2")
-
-# Frequency tables
 lapply(df_melanoma30[categorical_vars], table)
 
 # Bar plots for categorical variables
@@ -62,19 +58,21 @@ for (var in categorical_vars) {
   print(plot)
 }
 
-#opgave 3
+# Opgave 3: Kaplan-Meier Survival Analysis
 
-df_melanoma30$thickness_cat <-  as.factor(cut(df_melanoma30$thickness,
-                                    breaks = quantile(df_melanoma30$thickness, probs = c(0, 1/5, 2/5, 3/5, 4/5, 1), na.rm = TRUE),
-                                    labels = c("Cat 1", "Cat 2", "Cat 3", "Cat 4", "Cat 5")))
+# Create thickness categories
+df_melanoma30$thickness_cat <- as.factor(cut(df_melanoma30$thickness,
+                                             breaks = quantile(df_melanoma30$thickness, probs = c(0, 1/5, 2/5, 3/5, 4/5, 1), na.rm = TRUE),
+                                             labels = c("Cat 1", "Cat 2", "Cat 3", "Cat 4", "Cat 5")))
 
+# Create a survival object
 df_melanoma30$dead <- as.numeric(df_melanoma30$dead)
 survival_object <- Surv(df_melanoma30$time, df_melanoma30$dead)
 
-# Fit Kaplan-Meier survival curves for thickness categories
+# Fit Kaplan-Meier curves for thickness categories
 fit <- survfit(survival_object ~ thickness_cat, data = df_melanoma30)
 
-# Plot the survival curves
+# Plot Kaplan-Meier survival curves
 ggsurvplot(fit, data = df_melanoma30, 
            pval = TRUE, # Adds p-value from log-rank test
            conf.int = TRUE, # Adds confidence intervals
@@ -83,31 +81,21 @@ ggsurvplot(fit, data = df_melanoma30,
            palette = "Dark2",
            title = "Kaplan-Meier Survival Curves by Tumor Thickness Categories")
 
-#plot(fit, col = 1:3, main = "Kaplan-Meier Survival Curves by Tumor Thickness Categories")
-#legend("topright", legend = levels(df_melanoma30$thickness_cat), col = 1:3, lty = 1)
-
-
-# Perform the log-rank test independently
+# Perform the log-rank test
 log_rank_test <- survdiff(survival_object ~ thickness_cat, data = df_melanoma30)
-
-# Print the log-rank test result
 log_rank_test
 
-#opgave 4
+# Opgave 4: Cox Proportional Hazards Model
 
 # Fit the Cox proportional hazards model
-cox_model <- coxph(Surv(time, dead) ~ age + thickness + epicell + ici 
-                   + ulceration + sex + invas2, data = df_melanoma30)
+cox_model <- coxph(Surv(time, dead) ~ age + thickness + epicell + ici + ulceration + sex + invas2, data = df_melanoma30)
 summary(cox_model)
 
-
-# Calculate martingale residuals
+# Calculate and add martingale residuals to the dataset
 martingale_residuals <- residuals(cox_model, type = "martingale")
-
-# Add martingale residuals to the dataframe
 df_melanoma30$martingale_residuals <- martingale_residuals
 
-# Plot martingale residuals for 'age'
+# Plot martingale residuals against 'age'
 ggplot(df_melanoma30, aes(x = age, y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +
@@ -115,7 +103,7 @@ ggplot(df_melanoma30, aes(x = age, y = martingale_residuals)) +
   xlab("Age") +
   ylab("Martingale Residuals")
 
-# Plot martingale residuals for 'thickness'
+# Plot martingale residuals against 'thickness'
 ggplot(df_melanoma30, aes(x = thickness, y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +
@@ -123,21 +111,15 @@ ggplot(df_melanoma30, aes(x = thickness, y = martingale_residuals)) +
   xlab("Tumor Thickness") +
   ylab("Martingale Residuals")
 
-# Fit a model with log-transformed age and thickness
-cox_model_log <- coxph(Surv(time, dead) ~ log(age) + log(thickness) + epicell + ici 
-                       + ulceration + sex + invas2, data = df_melanoma30)
+# Fit models with log-transformed age and thickness
+cox_model_log <- coxph(Surv(time, dead) ~ log(age) + log(thickness) + epicell + ici + ulceration + sex + invas2, data = df_melanoma30)
+summary(cox_model_log)
 
-cox_model_log <- coxph(Surv(time, dead) ~ log(age) + log(thickness), data = df_melanoma30)
-cox_model <- coxph(Surv(time, dead) ~ age + thickness, data = df_melanoma30)
 # Compare AIC of original model vs log-transformed model
 AIC(cox_model, cox_model_log)
 
-
-
-# Opgave 5
-
-
-
+# Opgave 5: Additional Steps (To be defined as needed)
+# You can continue with model assessment, diagnostics, or any additional tasks for opgave 5
 
 
 
