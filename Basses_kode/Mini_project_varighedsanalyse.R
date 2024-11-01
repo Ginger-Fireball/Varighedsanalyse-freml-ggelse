@@ -7,7 +7,7 @@ library(moments)
 
 #stor tissemand
 # Load the data
-load("/Users/marcusbassepedersen/R-code/melanoma30.RData")
+load("melanoma30.RData")
 df_melanoma30 <- melanoma30
 
 # View the first few rows and structure of the dataset
