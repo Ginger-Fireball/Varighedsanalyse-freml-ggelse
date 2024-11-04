@@ -79,7 +79,7 @@ survival_object <- Surv(df_melanoma30$time, df_melanoma30$dead)
 fit <- survfit(survival_object ~ thickness_cat, data = df_melanoma30)
 
 # Plot Kaplan-Meier survival curves
-pdf("Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf")
+pdf("Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf",width = 400,height = 300)
 ggsurvplot(fit, data = df_melanoma30, 
            pval = TRUE, # Adds p-value from log-rank test
            conf.int = FALSE, # Adds confidence intervals
