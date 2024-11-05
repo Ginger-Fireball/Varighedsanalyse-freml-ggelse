@@ -6,9 +6,8 @@ library(survminer)
 library(moments)
 #stor tissemand
 # Load the data
-load("melanoma30.RData")
 df_melanoma30 <- melanoma30
-
+View(df_melanoma30)
 # View the first few rows and structure of the dataset
 head(df_melanoma30)
 str(df_melanoma30)
