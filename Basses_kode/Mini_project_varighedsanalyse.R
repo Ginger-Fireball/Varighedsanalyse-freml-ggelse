@@ -4,7 +4,6 @@ library(survival)
 library(KMsurv)
 library(survminer)
 library(moments)
-
 #stor tissemand
 # Load the data
 load("melanoma30.RData")
@@ -18,7 +17,7 @@ summary(df_melanoma30)
 # Boxplots for continuous variables
 continuous_vars <- c("time", "thickness", "age", "logthick")
 for (var in continuous_vars) {
-  pdf(paste("Billeder_duration/Boxplot_of_",var,".pdf"),width = 400,height = 300)
+  pdf(paste0("Billeder_duration/Boxplot_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
     geom_boxplot() +
     ggtitle(paste("Boxplot of", var)) +
@@ -32,7 +31,7 @@ dev.off()
 
 # Histogram and density plot for continuous variables
 for (var in continuous_vars) {
-  pdf(paste("Billeder_duration/Histogram_and_Density_of_",var,".pdf"))
+  pdf(paste0("Billeder_duration/Histogram_and_Density_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
   #  geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
     geom_density(aes(y = ..density.. * max(..count..)), color = "red") +
@@ -53,7 +52,7 @@ lapply(df_melanoma30[categorical_vars], table)
 
 # Bar plots for categorical variables
 for (var in categorical_vars) {
-  pdf(paste("Billeder_duration/Bar_plot_of_",var,".pdf"))
+  pdf(paste0("Billeder_duration/Bar_plot_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
     geom_bar(fill = "lightblue", color = "black") +
     ggtitle(paste("Bar plot of", var)) +
@@ -79,7 +78,7 @@ survival_object <- Surv(df_melanoma30$time, df_melanoma30$dead)
 fit <- survfit(survival_object ~ thickness_cat, data = df_melanoma30)
 
 # Plot Kaplan-Meier survival curves
-pdf("Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf",width = 400,height = 300)
+pdf("Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf")
 ggsurvplot(fit, data = df_melanoma30, 
            pval = TRUE, # Adds p-value from log-rank test
            conf.int = FALSE, # Adds confidence intervals
