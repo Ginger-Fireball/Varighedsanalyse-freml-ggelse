@@ -1,24 +1,17 @@
 \chapter{2. opgave}
-Da vi tjekkede for outliers haved vi 12 kategorier at kigge på de er skrevet nedenfor i hvor tekst er skrevet til hver, givet om der er outliers eller ej.
+For at tjekke for outliers har vi 12 kategorier at kigge på de er skrevet nedenfor i hvor tekst er skrevet til hver, givet om der er outliers eller ej.
 \begin{enumerate}
 \item Patient number id. \newline
 De vil ikke give mening at lave en test da det er et nummer givet til dem 
-\item  Time in study time.\\
-\begin{figure}[H]
+\item  Time in study time.
+\newline
+\newline
+\begin{figure}
   \centering
-  \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Boxplot_of_ time .pdf}
-    \caption{Boxplot over time}
-    \label{fig:Residuals_plotted}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ time .pdf}
-    \caption{Density over time}
-    \label{fig:long_ACF_residuals}
-  \end{subfigure}
+  \subfloat[first caption.]{\includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_ time .pdf}}\hfill
+  \subfloat[first caption.\label{fig:1a}]{\includegraphics[width=0.4\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ time .pdf}}\hfill
   \caption{Plots for outliers and density over time}
 \end{figure}
-
 
 \textbf{Outliers: }På billedet kan de ses at der er en enkel outlier, men siden det er en person der var i live i slutning må vi konkludere at det eneste der er at se er en rask patient der kom ind i forsøget tidligt.\\
 \textbf{Distribution :} Plotter man densiteten af tidsgrafen ser man en nogenlunde normalfordeling dog med en, som forventet, tung højre hale
@@ -91,6 +84,7 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts Based on Presence of Ulceration}
     \label{tab:ulceration}
 \end{table}
+
 \newpage
 \item Thickness of tumor (1/100mm) thickness.
 
@@ -180,7 +174,6 @@ Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hv
     \label{fig:enter-label}
 \end{figure}
 
-
 \chapter{4. Opgave}
 Fitter man ved hjælp a Cox' opnås følgende:
 \begin{table}[H]
@@ -208,6 +201,19 @@ I ovenstående tabel er der nogle fokuspunkter som observeres:\\
 \textbf{sexmale:} Denne er tilsvarende epicellyes, hvor "female" er baselineværdien.\\
 \textbf{invas2ClarkIV-V:} Denne er tilsvarende epicellyes, hvor "Clark I-III" er baselineværdien.\\\\
 Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilket indikerer at der formentlig er en nogenlunde lineær sammenhæng mellem alder og overlevelses sandsynlighed. Dette i kombination med få outliers er incitament for ikke at det skulle være nødvendigt at transformere denne variabel.\\
+\newpage
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Age.pdf}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Tumor_Thickness.pdf}
+    \end{subfigure}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
 Martingale residualerne for thickness er dog noget mere svingende. Her ser man afvigelser fra den lineære tendens hvilket kan skyldes flere ting. Først er det værd at bemærke at koefficienten for denne variabel $\approx 0$ hvilket kunne være relativt misvisende eftersom tykkelsen af tumor skulle have ret stor indflydelse på overlevelses sandsynligheden. Ydermere er der i thickness parameteren også en del outliers og en transformation (log, kvadratrod, el. lign) kan dermed være effektiv. Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i spørgsmål 6.
 
 \chapter{5. Opgave}
