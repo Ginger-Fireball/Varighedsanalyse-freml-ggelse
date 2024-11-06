@@ -8,7 +8,6 @@ library(dplyr)
 library(car) # For VIF calculation
 library(broom) # For tidy residuals
 
-#stor tissemand
 # Load the data
 load("melanoma30.RData")
 df_melanoma30 <- melanoma30
@@ -18,7 +17,6 @@ df_melanoma30$epicell <- (as.numeric(df_melanoma30$epicell)) - 1
 df_melanoma30$ulceration <- (as.numeric(df_melanoma30$ulceration)) - 1
 df_melanoma30$sex <- (as.numeric(df_melanoma30$sex)) -1
 df_melanoma30$invas2 <- (as.numeric(df_melanoma30$invas2)) - 1
-
 
 # View the first few rows and structure of the dataset
 head(df_melanoma30)
