@@ -1,27 +1,29 @@
+\chapter{1. opgave}
+
+1.a Ud fra de givne data er det tydeligt, at datasættet inkluderer patienter, der stadig var i live ved slutningen af studieperioden, hvilket betyder, at studiet sluttede, inden alle patienter var døde af enten modermærkekræft eller andre årsager, hvilket indikerer højrecensorering. Dermed er der uafhængig censurering, da patienter, der døde af ikke-modermærkecancer-relaterede årsager ikke er fjernet fra datasættet. Uanset om de døde af kræft eller en anden tilstand, blev patienterne stadig registreret, hvilket giver et mere fuldstændigt billede af patienternes resultater.\\\\
+
+1.b Dødsfald på grund af andre årsager kan være påvirket af modermærkekræft. Kræft kan er hårdt for kroppens immunforsvar og dette kan blive svækket betydeligt og fratage raske celler den energi, de har brug for til at fungere optimalt. Derudover har kræft potentiale til at metastasere (sprede sig fra en kropsdel til en anden), hvilket fører til en mere aggressiv sygdom, der kan nødvendiggøre kemoterapi (man kan også få kemoterapi for modermærkekræft). Mens kemoterapi dræber kræften, svækker det immunforsvaret, hvilket gør patienterne mere sårbare over for andre infektioner eller komplikationer. Desuden har operationer med formålet at fjerne tumorer også en risici, herunder potentielle infektioner, der også kan være en dødsårsag. Sammenfattende kan flere sundhedsrisici ofte opstå samtidigt, overvælde immunforsvaret og ende med døden. Dette indikerer altså at vi i dette tilfælde ikke kan antage uafhængig censorering
+
+
+
 \chapter{2. opgave}
-Da vi tjekkede for outliers haved vi 12 kategorier at kigge på de er skrevet nedenfor i hvor tekst er skrevet til hver, givet om der er outliers eller ej.
+For at tjekke for outliers har vi 12 kategorier at kigge på de er skrevet nedenfor i hvor tekst er skrevet til hver, givet om der er outliers eller ej.
 \begin{enumerate}
 \item Patient number id. \newline
 De vil ikke give mening at lave en test da det er et nummer givet til dem 
-\item  Time in study time.\\
-\begin{figure}[H]
+\item  Time in study time.
+\newline
+
+\begin{figure}[h]
   \centering
-  \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Boxplot_of_ time .pdf}
-    \caption{Boxplot over time}
-    \label{fig:Residuals_plotted}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ time .pdf}
-    \caption{Density over time}
-    \label{fig:long_ACF_residuals}
-  \end{subfigure}
+  \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_time.pdf}}\hfill
+  \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_time.pdf}}\hfill
   \caption{Plots for outliers and density over time}
 \end{figure}
 
-
 \textbf{Outliers: }På billedet kan de ses at der er en enkel outlier, men siden det er en person der var i live i slutning må vi konkludere at det eneste der er at se er en rask patient der kom ind i forsøget tidligt.\\
-\textbf{Distribution :} Plotter man densiteten af tidsgrafen ser man en nogenlunde normalfordeling dog med en, som forventet, tung højre hale
+\textbf{Distribution :} Plotter man densiteten af tidsgrafen ser man en nogenlunde normalfordeling dog med en, som forventet, tung højre hale\\
+\textbf{Skewness:} Denne har en skewnessværdi på 0.33 hvilket indikerer at den er en smule højreskæv som også fremgår af densitetplottet
 
 
 \item Cause of death status. \newline
@@ -91,20 +93,18 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts Based on Presence of Ulceration}
     \label{tab:ulceration}
 \end{table}
+
 \newpage
 \item Thickness of tumor (1/100mm) thickness.
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Boxplot_of_ thickness .pdf}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ thickness .pdf}
-    \end{subfigure}
+\subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_thickness.pdf}}\hfill
+  \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_thickness.pdf}}\hfill
 \end{figure}
 \textbf{Outliers:}Selvom vi ser mange Outliers, ved vi ikke om størrelsen har indflydelse på om patienten overlever eller ej, det bliver besvaret i næste opgave\\
 \textbf{Distribution: } Tykkelsen af tumor fremstår som en betadistribution som er, naturligvis, ikke negativ, stiger i starten og falder derefter og får en lang højre hale. Undersøges yderligere logaritmen til disse værdier fremgår en nogenlunde normaldistribution.\\
+\textbf{Skewness:} Denne har en skewness værdi på 2.17 hvilket, som plottet også viser, indikerer at den er meget højreskæv
 
 \item Sex sex.\\
 \begin{table}[h!]
@@ -124,31 +124,25 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
 \newline
 \begin{figure}[h]
     \centering
-\begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Boxplot_of_ age .pdf}
-    
-\end{subfigure} 
-\begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ age .pdf}
-\end{subfigure}  
+ \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_age.pdf}}\hfill
+  \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_age.pdf}}\hfill
+  \caption{Plots for outliers and density over time}
 \end{figure}
 
-\textbf{Outliers: }Her ser vi en enkelt ung outlier 
-\textbf{Age: } Aldersmæssigt haves en tung venstrehale og ellers fremstår en normal distribution nogenlunde
+\textbf{Outliers: }Her ser vi en enkelt ung outlier\\ 
+\textbf{Age: } Aldersmæssigt haves en tung venstrehale og ellers fremstår en normal distribution nogenlunde\\
+\textbf{Skewness:} Denne har en skewnessværdi på -0.30 hvilket indikerer den er en smule venstreskæv som man kan se udfra grafen også.
 \newpage
 \item Natural log of thickness/100 logthick.
 \newline
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Boxplot_of_ logthick .pdf}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.49\textwidth}
-    \includegraphics[width=\textwidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_ logthick .pdf} 
-    \end{subfigure}
+    \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_logthick.pdf}}\hfill
+  \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_logthick.pdf}}\hfill
 \end{figure}
 \textbf{Outliers: }We see one outlier when taking log to it but to dertemin if the outlier has any influence on the health of the patient another method must be used aswell\\
-\textbf{Distribution: }Kigges på distributionen af logaritmen af tykkelsen på tumor, vil der være en nogenlunde normaldistribution, dog med en tung venstre hale.
+\textbf{Distribution: }Kigges på distributionen af logaritmen af tykkelsen på tumor, vil der være en nogenlunde normaldistribution, dog med en tung venstre hale.\\
+\textbf{Skewness:} Denne har en skewnessværdi på -0.35 som er noget nærmere 0 end for thickness. Dette vil sige at den er en smule venstreskæv men ikke af stor betydning.
 \item Depth of invasion of tumor score invas2.
 \begin{table}[h!]
     \centering
@@ -171,13 +165,12 @@ Med henblik på de resterende, ikke kontinuerte variable, er der en fin distribu
 
 \chapter{3. Opgave}
 I opgave 3 starter vi med at kigge på survival plottene. Den tydelige tendens er at jo højere kategori du tykkelsen befinder sig i, desto lavere overlevelses sandsynlighed har du. Altså har de personer med 20\% højest tykkelse en væsentlig lavere sandsynlighed for overlevelse end dem i 20\% tyndeste gruppe.\\
-Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hvilket er meget lavt. Dette indikerer dermed at der, som forventet, er stor forskel overlevelsessandsynlighed alt afhængigt af tykkelsen på tumor. Det er derfor samtidig retsvisende at antage at tumortykkelsen er en effektiv prediktor når overlevelses skal estimeres. Denne konklusion understøttes yderligere når man observerer survival plottene
-\newpage
-\begin{figure}[h]
+Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hvilket er meget lavt. Dette indikerer dermed at der, som forventet, er stor forskel overlevelsessandsynlighed alt afhængigt af tykkelsen på tumor. Det er derfor samtidig retsvisende at antage at tumortykkelsen er en effektiv prediktor når overlevelses skal estimeres. Denne konklusion understøttes yderligere når man observerer survival plottene.
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{Basses_kode/Billeder_duration/Kaplan-Meier_Survival_Curves_by_Tumor_Thickness_Categories.pdf}
-    \caption{Caption}
-    \label{fig:enter-label}
+    \includegraphics[width=1\linewidth]{Formalities/Billeder/surv_curves_project.png}
+    \caption{KM-Survival Curves}
+    \label{surv_curv}
 \end{figure}
 
 
@@ -202,17 +195,56 @@ invas2Clark IV-V & 0.1254010 \\
 \label{tab:coefficients}
 \end{table}
 I ovenstående tabel er der nogle fokuspunkter som observeres:\\
-\textbf{epicellyes:} Her håndteres en kategorisk variabel hvor modellen er lavet udfra at resultatet "no" er baseline i modellen og dermed er det værdierne med "yes" som pålægges denne koefficient.\\
+\textbf{epicellyes:} Her håndteres en kategorisk variabel hvor modellen er lavet udfra at resultatet "0" er "no" baseline i modellen og dermed er det værdierne med "1" som er "yes", som pålægges denne koefficient.\\
 \textbf{ici:} ICI scoren er også en kategorisk parameter. Denne er dog anderledes i den forstand at den har inputs "1", "2", "3", "4", hvilket betyder at det pr. modellen er 4 gange så kritisk at have en ici score på 4 kontra en score på 1. Dette er ikke nødvendigvis retvisende og man kunne derfor argumenterer for om det havde været mere eksakt at give det værdierne "lav" "middel" "høj", "Meget høj" f.eks.\\
-\textbf{ulcerationyes:} Denne er tilsvarende epicellyes, hvor "no" er baselineværdien.\\
-\textbf{sexmale:} Denne er tilsvarende epicellyes, hvor "female" er baselineværdien.\\
-\textbf{invas2ClarkIV-V:} Denne er tilsvarende epicellyes, hvor "Clark I-III" er baselineværdien.\\\\
-Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilket indikerer at der formentlig er en nogenlunde lineær sammenhæng mellem alder og overlevelses sandsynlighed. Dette i kombination med få outliers er incitament for ikke at det skulle være nødvendigt at transformere denne variabel.\\
-Martingale residualerne for thickness er dog noget mere svingende. Her ser man afvigelser fra den lineære tendens hvilket kan skyldes flere ting. Først er det værd at bemærke at koefficienten for denne variabel $\approx 0$ hvilket kunne være relativt misvisende eftersom tykkelsen af tumor skulle have ret stor indflydelse på overlevelses sandsynligheden. Ydermere er der i thickness parameteren også en del outliers og en transformation (log, kvadratrod, el. lign) kan dermed være effektiv. Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i spørgsmål 6.
+\textbf{ulcerationyes:} Denne er tilsvarende epicellyes, hvor "0" er "no" som er baselineværdien.\\
+\textbf{sexmale:} Denne er tilsvarende epicellyes, hvor "0" er female som er baselineværdien.\\
+\textbf{invas2ClarkIV-V:} Denne er tilsvarende epicellyes, hvor "0" er "Clark I-III" som er baselineværdien.\\\\
+Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilket indikerer at der formentlig er en nogenlunde lineær sammenhæng mellem alder og overlevelses sandsynlighed og at kovariaten ikke er tidsafhængig. Dette i kombination med få outliers er incitament for ikke at det skulle være nødvendigt at transformere denne variabel.\\
+\newpage
+\begin{figure}[h]
+    \centering
+    \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Age.pdf}}\hfill
+  \subfloat[density]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Tumor_Thickness.pdf}}\hfill
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\noindent Martingale residualerne for thickness er dog noget mere svingende. Her ser man afvigelser fra den lineære tendens hvilket kan skyldes flere ting. Først er det værd at bemærke at koefficienten for denne variabel $\approx 0$ hvilket kunne være relativt misvisende eftersom tykkelsen af tumor skulle have ret stor indflydelse på overlevelses sandsynligheden. Ydermere er der i thickness parameteren også en del outliers og en transformation (log, kvadratrod, el. lign) kan dermed være effektiv. Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i opgave 6.
 
 \chapter{5. Opgave}
+Vi starter med at tjekke Cox-Snell residualerne, hvor vi ser residualerne nogenlunde følger den røde linje $y=x$ som ønsket. Det skal nævnes at det ikke er perfekt men giver en god approksimation. Cox-Snell residualerne er givet som minus den naturlige logaritme af overlevelsessandsynligheden for hver observation.\\\\
+Martingale residualerne som vi også gennemgik nogle af i opgave 4 plottes også. Her ser vi igen nogen relativt konstante kurver og residualer som er spredt ligeligt omkring.\\\\
 
+\noindent Tjekkes deviance residuals så skal de gerne følge en nogenlunde normaldistribution, hvilket indikerer at modellen er korrekt.\\\\
 
+Schoenfield residuals giver følgende resultat:
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrrr}
+\hline
+Covariate & Chi-Square & df & p-value \\
+\hline
+age        & 0.360     & 1  & 0.54827 \\
+thickness  & 12.226    & 1  & 0.00047 \\
+epicell    & 0.617     & 1  & 0.43199 \\
+ici        & 2.205     & 1  & 0.13761 \\
+ulceration & 3.567     & 1  & 0.05895 \\
+sex        & 1.146     & 1  & 0.28443 \\
+invas2     & 5.837     & 1  & 0.01569 \\
+\hline
+GLOBAL     & 14.241    & 7  & 0.04706 \\
+\hline
+\end{tabular}
+\end{table}
+\newline 
+Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan vi udfra plottene konkludere at de forskellige covariater ikke ser ud til at være tidsafhængige, som ønsket.\\
+\textbf{Age:} Som ønsket ligger residualerne fint spredt og vi ser en relativt flad kurve som ønsket hvilket indikerer den ikke er tidsafhængig\\
+\textbf{Thickness:} Her starter den kurven lidt højt men vi når ret hurtigt en flad kurve der er konstant\\
+\textbf{epicell:} Denne har få udsving men holder sig generelt konstant\\
+\textbf{ici:} Denne er relativt konstant.\\
+\textbf{ulceratio:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne\\
+\textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant\\
+\textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve. 
 
-
-
+\chapter{6. Opgave}
