@@ -146,9 +146,14 @@ dev.off()
 ## Check Proportional Hazards Assumption
 ph_test <- cox.zph(cox_model)
 print(ph_test)
-jpeg("Billeder_duration/Schoenfeld Residuals.jpeg")
-plot(ph_test, main = "Schoenfeld Residuals")
+jpeg("Billeder_duration/Schoenfeld_Residuals.jpeg")
+# Use ggcoxzph to create a combined plot
+ggcoxzph(ph_test)
+# Close the device
 dev.off()
+
+
+
 ## Examine Residuals
 # Martingale Residuals
 martingale_residuals <- residuals(cox_model, type = "martingale")
