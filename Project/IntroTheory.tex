@@ -278,33 +278,69 @@ Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan 
 \textbf{ulceration:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne.\\
 \textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant.\\
 \textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve.
+\newpage
 \begin{figure}[h]
     \centering
     \subfloat[age]{
-    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_age.pdf}}\hfill
+    \includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_age.pdf}}\hfill
     \subfloat[ICI]{
-    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ici.pdf}}\hfill
+    \includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ici.pdf}}\hfill
      \subfloat[Epicell]{
-    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_epicell.pdf}}\hfill
-    \subfloat[Invas2]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_invas2.pdf}}\hfill
-    \subfloat[Sex]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_sex.pdf}}\hfill\subfloat[Thickness]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_thickness.pdf}}\hfill
-    \subfloat[ulceration]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ulceration.pdf}}\hfill
+    \includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_epicell.pdf}}\hfill
+    \subfloat[Invas2]{\includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_invas2.pdf}}\hfill
+    \subfloat[Sex]{\includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_sex.pdf}}\hfill
+    \subfloat[Thickness]{\includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_thickness.pdf}}\hfill
+    \subfloat[ulceration]{\includegraphics[width=0.3\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ulceration.pdf}}\hfill
     \caption{DF$\beta$ for all}
-    \label{fig:enter-label}
 \end{figure}
 
 
 
 
-\noindent Vi benytter derefter dfbeta plottene for at tjekke efter såkaldte "influential points", hvor det observeres der ikke er nogle umiddelbare influential points.\\\\
-\noindent Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit.
+\noindent Vi benytter derefter dfbeta plottene for at tjekke efter såkaldte "influential points", hvor det observeres der ikke er nogle umiddelbare influential points hvilket indikerer at ingen af parametrene har stor indflydelse. dfbeta måler ændingen i hver kovariats koefficient når en observation fjernes. Det er kun for invas 2 hvor man kan se et betydeligt punkt dog ligger dette punkt ikke udenfor "threshhold". Igen indikerer thickness grafen (måske også age) at man burde overeveje en transformation af disse eftersom koefficienten er så lav at alle punkterne ligger ved 0.0.
+\pause
+Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit - der er samtidig belæg for en transformation af nogle af parametrene.
 
 \chapter{6. opgave}
+Looking at the p-value it indicates tumorthickness is insignificant i
+
 the p value of log thickness is not under so we cant reject the null hypothesis
 This suggests that logthick (tumor thickness) may not have a statistically
 significant effect on survival in this model.
+\begin{lstlisting}
+    
+               coef exp(coef) se(coef)      z Pr(>|z|)   
+log(age)    0.96439   2.62319  0.36466  2.645  0.00818 **
+logthick    0.32727   1.38718  0.20240  1.617  0.10588   
+epicell    -0.35180   0.70342  0.26876 -1.309  0.19054   
+ici         0.32189   1.37974  0.17296  1.861  0.06273 . 
+ulceration  0.79950   2.22443  0.29175  2.740  0.00614 **
+sex         0.43001   1.53727  0.25224  1.705  0.08824 . 
+invas2      0.03736   1.03807  0.33254  0.112  0.91055   
+---
+Signif. codes:  0 *** 0.001 ** 0.01 * 0.05 . 0.1   1
+
+           exp(coef) exp(-coef) lower .95 upper .95
+log(age)      2.6232     0.3812    1.2836     5.361
+logthick      1.3872     0.7209    0.9329     2.063
+epicell       0.7034     1.4216    0.4154     1.191
+ici           1.3797     0.7248    0.9830     1.936
+ulceration    2.2244     0.4496    1.2557     3.941
+sex           1.5373     0.6505    0.9377     2.520
+invas2        1.0381     0.9633    0.5410     1.992
+
+Concordance= 0.75  (se = 0.032 )
+Likelihood ratio test= 52.53  on 7 df,   p=5e-09
+Wald test            = 48.52  on 7 df,   p=3e-08
+Score (logrank) test = 53.13  on 7 df,   p=3e-09
+\end{lstlisting}
 
 \chapter{7. opgave}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/survival_curve_man_57.pdf}
+    \caption{Caption}
+\end{figure}
 Manden har $27,8\%$ chance for at leve til han er 65 år gammel. 
 Nedenfor kan survival kurven ses for manden.
 
