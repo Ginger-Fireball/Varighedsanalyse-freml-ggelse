@@ -1,16 +1,18 @@
 \chapter{1. opgave}
 
-1.a Ud fra de givne data er det tydeligt, at datasættet inkluderer patienter, der stadig var i live ved slutningen af studieperioden, hvilket betyder, at studiet sluttede, inden alle patienter var døde af enten modermærkekræft eller andre årsager, hvilket indikerer højrecensorering. Dermed er der uafhængig censurering, da patienter, der døde af ikke-modermærkecancer-relaterede årsager ikke er fjernet fra datasættet. Uanset om de døde af kræft eller en anden tilstand, blev patienterne stadig registreret, hvilket giver et mere fuldstændigt billede af patienternes resultater.\\\\
+\textbf{1.a} \\
+\noindent Ud fra de givne data er det tydeligt, at datasættet inkluderer patienter, der stadig var i live ved slutningen af studieperioden, hvilket betyder, at studiet sluttede, inden alle patienter var døde af enten modermærkekræft eller andre årsager, hvilket indikerer højrecensorering. Der er yderligere også uafhængig censurering, da patienter, der døde af ikke-modermærkekræft-relaterede årsager ikke er fjernet fra datasættet. Uanset om de døde af kræft eller anden årsag, blev patienterne stadig registreret, hvilket giver et mere fuldstændigt billede af patienternes resultater.\pause[3em]
 
-1.b Dødsfald på grund af andre årsager kan være påvirket af modermærkekræft. Kræft kan er hårdt for kroppens immunforsvar og dette kan blive svækket betydeligt og fratage raske celler den energi, de har brug for til at fungere optimalt. Derudover har kræft potentiale til at metastasere (sprede sig fra en kropsdel til en anden), hvilket fører til en mere aggressiv sygdom, der kan nødvendiggøre kemoterapi (man kan også få kemoterapi for modermærkekræft). Mens kemoterapi dræber kræften, svækker det immunforsvaret, hvilket gør patienterne mere sårbare over for andre infektioner eller komplikationer. Desuden har operationer med formålet at fjerne tumorer også en risici, herunder potentielle infektioner, der også kan være en dødsårsag. Sammenfattende kan flere sundhedsrisici ofte opstå samtidigt, overvælde immunforsvaret og ende med døden. Dette indikerer altså at vi i dette tilfælde ikke kan antage uafhængig censorering
+\noindent\textbf{1.b}\\
+\noindent Dødsfald på grund af andre årsager kan være påvirket af modermærkekræft. Kræft er hårdt for kroppens immunforsvar og dette kan blive svækket betydeligt og fratage raske celler den energi, de har brug for til at fungere optimalt. Derudover har kræft potentiale til at metastasere (sprede sig fra en kropsdel til en anden), hvilket fører til en mere aggressiv sygdom, der kan nødvendiggøre kemoterapi (man kan også få kemoterapi for modermærkekræft). Mens kemoterapi dræber kræften, svækker det immunforsvaret, hvilket gør patienterne mere sårbare over for andre infektioner eller komplikationer. Desuden har operationer med formålet at fjerne tumorer også en risici, herunder potentielle infektioner, der også kan være en dødsårsag. Sammenfattende kan flere sundhedsrisici ofte opstå samtidigt, hvilket kan overvælde immunforsvaret og ende med døden. Dette indikerer altså at vi i dette tilfælde ikke kan antage uafhængig censorering.
 
 
 
 \chapter{2. opgave}
-For at tjekke for outliers har vi 12 kategorier at kigge på de er skrevet nedenfor i hvor tekst er skrevet til hver, givet om der er outliers eller ej.
+For at tjekke for outliers har vi 12 kategorier at kigge på de er beskrevet nedenfor sammen med konklusionen
 \begin{enumerate}
 \item Patient number id. \newline
-De vil ikke give mening at lave en test da det er et nummer givet til dem 
+Det vil ikke give mening at lave en test da det er et nummer givet til hver patient.
 \item  Time in study time.
 \newline
 
@@ -21,9 +23,9 @@ De vil ikke give mening at lave en test da det er et nummer givet til dem
   \caption{Plots for outliers and density over time}
 \end{figure}
 
-\textbf{Outliers: }På billedet kan de ses at der er en enkel outlier, men siden det er en person der var i live i slutning må vi konkludere at det eneste der er at se er en rask patient der kom ind i forsøget tidligt.\\
-\textbf{Distribution :} Plotter man densiteten af tidsgrafen ser man en nogenlunde normalfordeling dog med en, som forventet, tung højre hale\\
-\textbf{Skewness:} Denne har en skewnessværdi på 0.33 hvilket indikerer at den er en smule højreskæv som også fremgår af densitetplottet
+\textbf{Outliers: }På billedet kan det ses at der er en enkel outlier, men siden det er en person der var i live i slutning må vi konkludere at det eneste der er at se er en rask patient der kom ind i forsøget tidligt.\\
+\textbf{Distribution:} Plotter man densiteten af tidsgrafen ser man en nogenlunde normalfordeling dog med en, som forventet, tung højre hale.\\
+\textbf{Skewness:} Denne har en skewnessværdi på 0.33 hvilket indikerer at den er en smule højreskæv som også fremgår af densitetplottet.
 
 
 \item Cause of death status. \newline
@@ -39,8 +41,8 @@ De vil ikke give mening at lave en test da det er et nummer givet til dem
     \caption{Summary of Cases by Status}
     \label{tab:summary}
 \end{table}
-Dette kan vi ikke rigtig kigge på outliers, da det er dødsårsagen 
-\item Dead/alive at time of follow-up dead. \newline
+Det giver ikke mening at undersøge outliers i denne kategori. \newline
+\item dead/alive follow up\\
 \begin{table}[h!]
     \centering
     \begin{tabular}{|l|c|c|}
@@ -53,7 +55,9 @@ Dette kan vi ikke rigtig kigge på outliers, da det er dødsårsagen
     \caption{Summary of Dead and Alive Cases}
     \label{tab:dead_alive}
 \end{table}
-Her kan vi Heller ikke kigge på outliers da det er status på patient efter et bestemt tids interval
+
+
+\noindent Her kan vi heller ikke kigge på outliers da det er status på patient efter studiets slutning.
 \item Inflammatory cell infiltration score ici. \newline
 \begin{table}[h!]
     \centering
@@ -67,6 +71,7 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts for Categories 1 to 4}
     \label{tab:categories}
 \end{table}
+Her kan vi heller ikke kigge på outliers da det igen er en kategorisk variabel.
 \item Presence of epitheloid cells epicell. \newline
 \begin{table}[h!]
     \centering
@@ -80,6 +85,7 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts Based on Presence of Epitheloid Cells}
     \label{tab:epitheloid_cells}
 \end{table}
+Her kan vi heller ikke kigge på outliers da det igen er en kategorisk variabel.
 \item Presence of ulceration ulceration. \newline
 \begin{table}[h!]
     \centering
@@ -93,6 +99,7 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts Based on Presence of Ulceration}
     \label{tab:ulceration}
 \end{table}
+Her kan vi heller ikke kigge på outliers da det igen er en kategorisk variabel.
 
 \newpage
 \item Thickness of tumor (1/100mm) thickness.
@@ -102,11 +109,11 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
 \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_thickness.pdf}}\hfill
   \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_thickness.pdf}}\hfill
 \end{figure}
-\textbf{Outliers:}Selvom vi ser mange Outliers, ved vi ikke om størrelsen har indflydelse på om patienten overlever eller ej, det bliver besvaret i næste opgave\\
-\textbf{Distribution: } Tykkelsen af tumor fremstår som en betadistribution som er, naturligvis, ikke negativ, stiger i starten og falder derefter og får en lang højre hale. Undersøges yderligere logaritmen til disse værdier fremgår en nogenlunde normaldistribution.\\
-\textbf{Skewness:} Denne har en skewness værdi på 2.17 hvilket, som plottet også viser, indikerer at den er meget højreskæv
+\textbf{Outliers:} Selvom vi ser mange Outliers, ved vi ikke om størrelsen har indflydelse på om patienten overlever eller ej, det bliver besvaret i næste opgave.\\
+\textbf{Distribution: } Tykkelsen af tumor fremstår som en betadistribution som er, naturligvis, ikke negativ. Den stiger i starten og falder derefter og får en lang højre hale. Undersøges yderligere logaritmen til disse værdier fremgår en nogenlunde normaldistribution.\\
+\textbf{Skewness:} Denne har en skewness værdi på 2.17 hvilket, som plottet også viser, indikerer at den er meget højreskæv.
 
-\item Sex sex.\\
+\item Sex.\\
 \begin{table}[h!]
     \centering
     \begin{tabular}{|l|c|c|}
@@ -119,6 +126,7 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \caption{Counts by Sex}
     \label{tab:sex}
 \end{table}
+Her kan vi heller ikke kigge på outliers da det igen er en kategorisk variabel.
 \newpage
 \item Age at operation age.
 \newline
@@ -129,19 +137,20 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
   \caption{Plots for outliers and density over time}
 \end{figure}
 
-\textbf{Outliers: }Her ser vi en enkelt ung outlier\\ 
-\textbf{Age: } Aldersmæssigt haves en tung venstrehale og ellers fremstår en normal distribution nogenlunde\\
+\textbf{Outliers: }Her ser vi en enkelt ung outlier.\\ 
+\textbf{Age: } Aldersmæssigt haves en tung venstrehale og ellers fremstår en normal distribution nogenlunde.\\
 \textbf{Skewness:} Denne har en skewnessværdi på -0.30 hvilket indikerer den er en smule venstreskæv som man kan se udfra grafen også.
 \newpage
 \item Natural log of thickness/100 logthick.
-\newline
 \begin{figure}[h]
     \centering
     \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Boxplot_of_logthick.pdf}}\hfill
   \subfloat[density\label{fig:1a}]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Histogram_and_Density_of_logthick.pdf}}\hfill
 \end{figure}
-\textbf{Outliers: }We see one outlier when taking log to it but to dertemin if the outlier has any influence on the health of the patient another method must be used aswell\\
-\textbf{Distribution: }Kigges på distributionen af logaritmen af tykkelsen på tumor, vil der være en nogenlunde normaldistribution, dog med en tung venstre hale.\\
+
+\textbf{Outliers:} Vi ser en outlier, når vi tager logaritmen af den, men for at afgøre, om outlieren har nogen indflydelse på patientens helbred, skal en andre metoder også anvendes.\\
+
+\textbf{Distribution:} Kigges der på distributionen af logaritmen af tykkelsen på tumor, vil der være en nogenlunde normaldistribution, dog med en tung venstre hale.\\
 \textbf{Skewness:} Denne har en skewnessværdi på -0.35 som er noget nærmere 0 end for thickness. Dette vil sige at den er en smule venstreskæv men ikke af stor betydning.
 \item Depth of invasion of tumor score invas2.
 \begin{table}[h!]
@@ -157,15 +166,14 @@ Her kan vi Heller ikke kigge på outliers da det er status på patient efter et 
     \label{tab:invasion_level}
 \end{table}
 
+Her kan vi heller ikke kigge på outliers da det igen er en kategorisk variabel
 \end{enumerate}
 
-Med henblik på de resterende, ikke kontinuerte variable, er der en fin distribution kategorierne imellem.
-
-
+Med henblik på de ikke kontinuerte variable, er der en fin distribution kategorierne imellem, altså er der ingen katergorier der skiller sig meget ud.
 
 \chapter{3. opgave}
-I opgave 3 starter vi med at kigge på survival plottene. Den tydelige tendens er at jo højere kategori du tykkelsen befinder sig i, desto lavere overlevelses sandsynlighed har du. Altså har de personer med 20\% højest tykkelse en væsentlig lavere sandsynlighed for overlevelse end dem i 20\% tyndeste gruppe.\\
-Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hvilket er meget lavt. Dette indikerer dermed at der, som forventet, er stor forskel overlevelsessandsynlighed alt afhængigt af tykkelsen på tumor. Det er derfor samtidig retsvisende at antage at tumortykkelsen er en effektiv prediktor når overlevelses skal estimeres. Denne konklusion understøttes yderligere når man observerer survival plottene.
+I opgave 3 starter vi med at kigge på survival plottene. Den tydelige tendens er at jo højere thickness kategori du befinder sig i, desto lavere overlevelses sandsynlighed har du. Altså har de personer med 20\% højest tykkelse en væsentlig lavere sandsynlighed for overlevelse end dem i den 20\% tyndeste gruppe.\\
+Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hvilket er meget lavt. Dette indikerer dermed at der, som forventet, er stor forskel overlevelsessandsynlighed alt afhængigt af tykkelsen på tumor. Det er derfor samtidig retsvisende at antage at tumortykkelsen er en effektiv prediktor når overlevelsessandsynligheden skal estimeres. Denne konklusion understøttes yderligere når man observerer survival plottene.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{Formalities/Billeder/surv_curves_project.png}
@@ -194,7 +202,7 @@ invas2Clark IV-V & 0.1254010 \\
 \caption{Coefficients for Variables}
 \label{tab:coefficients}
 \end{table}
-I ovenstående tabel er der nogle fokuspunkter som observeres:\\
+\noindent I ovenstående tabel er der nogle fokuspunkter som observeres:\\
 \textbf{epicellyes:} Her håndteres en kategorisk variabel hvor modellen er lavet udfra at resultatet "0" er "no" baseline i modellen og dermed er det værdierne med "1" som er "yes", som pålægges denne koefficient.\\
 \textbf{ici:} ICI scoren er også en kategorisk parameter. Denne er dog anderledes i den forstand at den har inputs "1", "2", "3", "4", hvilket betyder at det pr. modellen er 4 gange så kritisk at have en ici score på 4 kontra en score på 1. Dette er ikke nødvendigvis retvisende og man kunne derfor argumenterer for om det havde været mere eksakt at give det værdierne "lav" "middel" "høj", "Meget høj" f.eks.\\
 \textbf{ulcerationyes:} Denne er tilsvarende epicellyes, hvor "0" er "no" som er baselineværdien.\\
@@ -215,7 +223,7 @@ Martingale residualerne udregnes ved
 \begin{align*}
     r_i^M = \delta_i - \hat{H}_0(t_i) \exp(z_i \hat{\beta}).
 \end{align*}
-Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i opgave 6.
+Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score.
 
 \chapter{5. opgave}
 \begin{figure}[h]
@@ -227,7 +235,7 @@ Ved gennemgang af AIC for en model med en log transformeret thickness opnåes og
     \caption{Cox-Snell}
     \label{fig:enter-label}
 \end{figure}
-Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transformation på paremetrene samt vi plotter for vores loggede model hvor der er taget logaritmen af både age og thickness parametren. Uden log ser vi at residualerne afviger let fra $x=y$ hvilket ikke er optimalt. Dog kan man samtidig argumentere for at der ikke er indikation for at modellen er forkert eftersom den følger nogenlunde. Plottet med de loggede værdier viser et bedre fit med residualer der følger $x=y$. Cox-Snell residualerne er givet som "minus den naturlige logaritme af overlevelsessandsynligheden for hver observation".\\\\
+Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transformation på paremetrene samt vi plotter for vores loggede model, hvor der er taget logaritmen af både age og thickness parametrene. Uden log ser vi at residualerne afviger let fra $x=y$ hvilket ikke er optimalt. Dog kan man samtidig argumentere for at der ikke er indikation for at modellen er forkert eftersom den følger nogenlunde. Plottet med de loggede værdier viser et bedre fit med residualer, der følger $x=y$. Cox-Snell residualerne er givet som "minus den naturlige logaritme af overlevelsessandsynligheden for hver observation".\\\\
 \newpage
     \begin{figure}[h]
     \centering
@@ -241,7 +249,14 @@ Tjekkes deviance residuals, som udregnes med følgende formel:
 \begin{align}
 r_i^D = \text{sign}(r_i^M) \left[ -2 \left( r_i^M + \delta_i \log(\delta_i - r_i^M) \right) \right]^{1/2}
 \end{align} 
-så skal de gerne følge en nogenlunde normaldistribution, hvilket indikerer at modellen er korrekt. Når densiteten af deviance residuals plottes ses en højreskæv normal distribution, hvilket indikerer at modellen er korrekt, men ikke perfekt.\\\\
+så skal de gerne følge en nogenlunde normaldistribution, hvilket indikerer at modellen er korrekt. Når densiteten af deviance residuals plottes ses en højreskæv normal distribution, hvilket indikerer at modellen er korrekt, men ikke perfekt.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/deviance_residuals_Histogram.pdf}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+\\\\
 
 \noindent Schoenfield residuals giver følgende resultat:
 \begin{table}[h!]
@@ -302,11 +317,7 @@ Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan 
 Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit - der er samtidig belæg for en transformation af nogle af parametrene.
 
 \chapter{6. opgave}
-Looking at the p-value it indicates tumorthickness is insignificant i
-
-the p value of log thickness is not under so we cant reject the null hypothesis
-This suggests that logthick (tumor thickness) may not have a statistically
-significant effect on survival in this model.
+Looking at the p-value it indicates tumorthickness is insignificant and therefore we are not able to reject the null-hypothesis.
 \begin{lstlisting}
     
                coef exp(coef) se(coef)      z Pr(>|z|)   
@@ -341,13 +352,19 @@ Score (logrank) test = 53.13  on 7 df,   p=3e-09
     \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/survival_curve_man_57.pdf}
     \caption{Caption}
 \end{figure}
-Manden har $27,8\%$ chance for at leve til han er 65 år gammel. 
+\noindent Manden har $27,8\%$ chance for at leve til han er 65 år gammel. 
 Nedenfor kan survival kurven ses for manden.
 
 
 \chapter{8. opgave}
-Grafen ser ud til at være konstant over tid, hvilket indikere brugen af en eksponentiel model.
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Basses_kode/Billeder_duration/cumulative_baseline_hazard_over_time.pdf}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+\noindent Grafen ser ud til at være konstant over tid, hvilket indikere brugen af en eksponentiel model.
+\pause
 Vi sammen ligner eksponentiel og weibull modellen
 \begin{lstlisting}
        > AIC(exp_model, weibull_model)
