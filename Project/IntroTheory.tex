@@ -215,11 +215,13 @@ Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilk
 \chapter{5. Opgave}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/Cox_Snell_residualer.pdf}
+    \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/log_Cox_Snell_residualer.pdf}
     \caption{Cox-Snell}
     \label{fig:enter-label}
 \end{figure}
-Vi starter med at tjekke Cox-Snell residualerne, hvor vi ser residualerne nogenlunde følger den røde linje $y=x$ som ønsket. Det skal nævnes at det ikke er perfekt men giver en god approksimation. Cox-Snell residualerne er givet som minus den naturlige logaritme af overlevelsessandsynligheden for hver observation.\\\\
+Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transformation på paremetrene samt vi plotter for vores loggede model hvor der er taget logaritmen af både age og thickness parametren. Uden log ser vi at re
+
+hvor vi ser residualerne nogenlunde følger den røde linje $y=x$ som ønsket. Det skal nævnes at det ikke er perfekt men giver en god approksimation. Cox-Snell residualerne er givet som minus den naturlige logaritme af overlevelsessandsynligheden for hver observation.\\\\
 Martingale residualerne som vi også gennemgik nogle af i opgave 4 udregnes på følgende måde:
 \begin{align*}
     r_i^M = \delta_i - \hat{H}_0(t_i) \exp(z_i \hat{\beta})
