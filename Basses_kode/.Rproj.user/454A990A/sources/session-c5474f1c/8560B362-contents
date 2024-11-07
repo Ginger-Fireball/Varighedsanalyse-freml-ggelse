@@ -146,7 +146,7 @@ dev.off()
 ## Check Proportional Hazards Assumption
 ph_test <- cox.zph(cox_model)
 print(ph_test)
-jpeg(("Billeder_duration/Schoenfeld_Residuals.jpeg"),width = 500,height = 800)
+jpeg("Billeder_duration/Schoenfeld_Residuals.jpeg")
 # Use ggcoxzph to create a combined plot
 ggcoxzph(ph_test)
 # Close the device
