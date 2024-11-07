@@ -300,3 +300,29 @@ dev.off()
 
 
 
+#Opgave 8 ----
+
+# Estimate the cumulative baseline hazard from the Cox model
+base_haz <- basehaz(cox_model_log, centered = FALSE)
+
+# Plot the cumulative baseline hazard over time
+pdf("Billeder_duration/cumulative_baseline_hazard_over_time.pdf")
+plot(base_haz$time, base_haz$hazard, type = "l", col = "blue", lwd = 2,
+     xlab = "Time", ylab = "Cumulative Baseline Hazard",
+     main = "Cumulative Baseline Hazard from Cox Model")
+dev.off()
+# Plot log-log of cumulative hazard for assessing Weibull fit
+plot(log(base_haz$time), log(base_haz$hazard), type = "l", col = "blue", lwd = 2,
+     xlab = "log(Time)", ylab = "log(Cumulative Baseline Hazard)",
+     main = "Log-Log Plot of Cumulative Baseline Hazard")
+
+# Fit an exponential model
+exp_model <- survreg(Surv(time, dead) ~ log(age) + logthick + epicell + ici + ulceration + sex + invas2, 
+                     data = df_melanoma30, dist = "exponential")
+summary(exp_model)
+# Fit a Weibull model
+weibull_model <- survreg(Surv(time, dead) ~ log(age) + logthick + epicell + ici + ulceration + sex + invas2, 
+                         data = df_melanoma30, dist = "weibull")
+summary(weibull_model)
+
+
