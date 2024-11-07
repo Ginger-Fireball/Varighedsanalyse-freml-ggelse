@@ -163,7 +163,7 @@ Med henblik på de resterende, ikke kontinuerte variable, er der en fin distribu
 
 
 
-\chapter{3. Opgave}
+\chapter{3. opgave}
 I opgave 3 starter vi med at kigge på survival plottene. Den tydelige tendens er at jo højere kategori du tykkelsen befinder sig i, desto lavere overlevelses sandsynlighed har du. Altså har de personer med 20\% højest tykkelse en væsentlig lavere sandsynlighed for overlevelse end dem i 20\% tyndeste gruppe.\\
 Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hvilket er meget lavt. Dette indikerer dermed at der, som forventet, er stor forskel overlevelsessandsynlighed alt afhængigt af tykkelsen på tumor. Det er derfor samtidig retsvisende at antage at tumortykkelsen er en effektiv prediktor når overlevelses skal estimeres. Denne konklusion understøttes yderligere når man observerer survival plottene.
 \begin{figure}[H]
@@ -174,7 +174,7 @@ Når vi udfører en log-rank test ses det at vi får en p-værdi på 0.00001, hv
 \end{figure}
 
 
-\chapter{4. Opgave}
+\chapter{4. opgave}
 Fitter man ved hjælp a Cox' opnås følgende:
 \begin{table}[H]
 \centering
@@ -217,7 +217,7 @@ Martingale residualerne udregnes ved
 \end{align*}
 Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i opgave 6.
 
-\chapter{5. Opgave}
+\chapter{5. opgave}
 \begin{figure}[h]
     \centering
     \subfloat[Uden naturlig logaritme]{
@@ -231,7 +231,7 @@ Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transform
 \newpage
     \begin{figure}[h]
     \centering
-    \includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/martingale_residuals_against_fitted_values.pdf}
+    \includegraphics[width=1\linewidth]{Basses_kode/Billeder_duration/martingale_residuals_against_fitted_values.pdf}
     \caption{Martingale residualer}
     \label{fig:enter-label}
 \end{figure}
@@ -277,23 +277,39 @@ Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan 
 \textbf{ici:} Denne er relativt konstant.\\
 \textbf{ulceration:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne.\\
 \textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant.\\
-\textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve. \\\\
+\textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve.
+\begin{figure}[h]
+    \centering
+    \subfloat[age]{
+    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_age.pdf}}\hfill
+    \subfloat[ICI]{
+    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ici.pdf}}\hfill
+     \subfloat[Epicell]{
+    \includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_epicell.pdf}}\hfill
+    \subfloat[Invas2]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_invas2.pdf}}\hfill
+    \subfloat[Sex]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_sex.pdf}}\hfill\subfloat[Thickness]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_thickness.pdf}}\hfill
+    \subfloat[ulceration]{\includegraphics[width=0.32\linewidth]{Basses_kode/Billeder_duration/DFBetas_for_ulceration.pdf}}\hfill
+    \caption{DF$\beta$ for all}
+    \label{fig:enter-label}
+\end{figure}
+
+
+
 
 \noindent Vi benytter derefter dfbeta plottene for at tjekke efter såkaldte "influential points", hvor det observeres der ikke er nogle umiddelbare influential points.\\\\
 \noindent Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit.
 
-
-
-\chapter{6. Opgave}
+\chapter{6. opgave}
 the p value of log thickness is not under so we cant reject the null hypothesis
 This suggests that logthick (tumor thickness) may not have a statistically
 significant effect on survival in this model.
-\chapter{7. Opgave}
+
+\chapter{7. opgave}
 Manden har $27,8\%$ chance for at leve til han er 65 år gammel. 
 Nedenfor kan survival kurven ses for manden.
 
 
-\chapter{8. Opgave}
+\chapter{8. opgave}
 Grafen ser ud til at være konstant over tid, hvilket indikere brugen af en eksponentiel model.
 
 Vi sammen ligner eksponentiel og weibull modellen
@@ -303,4 +319,4 @@ Vi sammen ligner eksponentiel og weibull modellen
 exp_model      8 1345.897
 weibull_model  9 1346.805 
 \end{lstlisting}
-den eksponentielle er marginalt bedre, men da både plottet over indikere eksponentiel, og det faktum at weibull er en mere kompleks model, bør den eksponentielle vælges.
+den eksponentielle er marginalt bedre, men da både plottet over indikere eksponentiel, og det faktum at weibull er en mere kompleks model, bør den eksponentielle model foretrækkes.
