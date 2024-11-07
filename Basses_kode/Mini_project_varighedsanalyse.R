@@ -35,14 +35,14 @@ for (var in continuous_vars) {
     xlab(var) +
     ylab("Values") -> plot
   print(plot)
-dev.off()
+  dev.off()
 }
 
 # Histogram and density plot for continuous variables
 for (var in continuous_vars) {
   pdf(paste0("Billeder_duration/Histogram_and_Density_of_",var,".pdf"))
   ggplot(df_melanoma30, aes_string(x = var)) +
-  #  geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
+    #  geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
     geom_density(aes(y = ..density.. * max(..count..)), color = "red") +
     ggtitle(paste("Histogram and Density of", var)) +
     theme_minimal() +
@@ -138,7 +138,7 @@ ggplot(df_melanoma30, aes(x = thickness, y = martingale_residuals)) +
 dev.off()
 
 
-# Opgave 5
+# Opgave 5 ---
 
 # Assume you have already fitted your Cox model
 # Example: cox_model <- coxph(Surv(time, dead) ~ age + thickness + epicell + ici + ulceration + sex + invas2, data = df_melanoma30)
@@ -146,16 +146,21 @@ dev.off()
 ## Check Proportional Hazards Assumption
 ph_test <- cox.zph(cox_model)
 print(ph_test)
-pdf("Billeder_duration/Schoenfeld Residuals.pdf")
-plot(ph_test, main = "Schoenfeld Residuals")
+jpeg("Billeder_duration/Schoenfeld_Residuals.jpeg")
+# Use ggcoxzph to create a combined plot
+ggcoxzph(ph_test)
+# Close the device
 dev.off()
+
+
+
 ## Examine Residuals
 # Martingale Residuals
 martingale_residuals <- residuals(cox_model, type = "martingale")
 df_melanoma30$martingale_residuals <- martingale_residuals
 
 # Plot martingale residuals against fitted values
-pdf("Billeder_duration/martingale_residuals_against_fitted_values.pdf")
+pdf("Billeder_duration/martingale_residuals_against_fitted_values.pdf",width = 25,height = 12)
 ggplot(df_melanoma30, aes(x = fitted(cox_model), y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +
@@ -183,15 +188,13 @@ dev.off()
 df_melanoma30$deviance_residuals <- deviance_residuals
 
 # Plot Histogram of Deviance Residuals
+devres=residuals(fitall,type="deviance")
+plot(df_melanoma30$age,devres)
 pdf("Billeder_duration/deviance_residuals_Histogram.pdf")
-ggplot(df_melanoma30, aes(x = deviance_residuals)) +
-  geom_histogram(binwidth = 0.1, fill = "lightgreen", color = "black") +
-  ggtitle("Histogram Deviance Residuals") +
-  xlab("Deviance Residuals") +
-  ylab("Frequency") +
-  theme_minimal()+
-  xlim(0,2)
-dev.off
+hist(devres)
+dev.off()
+boxplot(devres~df_melanoma30$dead)#many censored observations screw up deviance residuals.
+mean(df_melanoma30$dead)
 ## Check for Influential Observations using DFBetas
 # Calculate DFBetas for each observation in the Cox model
 dfbetas_values <- residuals(cox_model, type = "dfbeta")
@@ -236,15 +239,88 @@ coxsnellfit <- survfit(Surv(coxsnell,df_melanoma30$dead)~1)
 
 pdf("Billeder_duration/log_Cox_Snell_residualer.pdf")
 plot(log(coxsnellfit$time),log(-log(coxsnellfit$surv)))
+abline(c(0,1))
 dev.off()
 pdf("Billeder_duration/Cox_Snell_residualer.pdf")
 plot(coxsnellfit$time,-log(coxsnellfit$surv))
-dev.off()
 abline(c(0,1))
+dev.off()
 #looks pretty good.
 
 
+# Opgave 6 ----
+cox_model_log <- coxph(Surv(time, dead) ~ log(age) + logthick + epicell + ici + ulceration + sex + invas2, data = df_melanoma30)
+summary(cox_model_log)
+#the p value of log thickness is not under so we cant reject the null hypothesis
+#This suggests that logthick (tumor thickness) may not have a statistically
+# significant effect on survival in this model.
 
 
+# Opgave 7 ----
+# Define the individual's covariate values
+new_patient <- data.frame(
+  logthick = log(750),
+  epicell = 1,         # Assuming 1 represents presence of epitheloid cells
+  ici = 2,
+  ulceration = 1,      # Assuming 1 represents presence of ulceration
+  sex = 1,             # Assuming 1 represents male (check your dataset coding)
+  invas2 = 0,    #  I-III
+  age = log(57)
+)
+
+# Calculate the baseline survival function
+baseline_surv <- survfit(cox_model_log)
+
+# Predict the survival curve for the new individual over time
+surv_prob <- summary(survfit(cox_model_log, newdata = new_patient))
+
+# Extract the survival probability at 8 years
+time_8_years <- 8 * 365.25  # 8 years in days (if your time scale is in days)
+surv_at_8_years <- surv_prob$surv[surv_prob$time == time_8_years]
+
+# Find the closest time to 8 years in surv_prob$time
+closest_time_index <- which.min(abs(surv_prob$time - time_8_years))
+
+# Get the survival probability at the closest time point
+surv_at_8_years <- surv_prob$surv[closest_time_index]
+
+# Display the estimated survival probability at the closest time to 8 years
+cat("The man's survival probability is", round(surv_at_8_years * 100, 1), "%")
+
+# Generate the survival curve for the individual
+surv_curve <- survfit(cox_model_log, newdata = new_patient)
+
+# Plot the survidata:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAkCAYAAAD7PHgWAAABBklEQVR4Xu2XMQrCQBBFBQvR6wgJHsEDpHVjBDvvoBhbI3bWCkZbFUyhFrYiEat0WgmC6AVkdQqbIVmWZAOi82C64b+/bDWZDEEQP4phTLMaa9d003bTGMgu1psF7JVGNzuWPdzs18GDz443rgrIcndXbvW8g1axGfZKo7P2eBXc+WB74a3FGXtiA1kwzfnpqTF7hL3SwDfAaz+BqvjkwYADe6WhglQwJlQwKVQwKakVTGOoYNL5z4JxwBlUMEwqAu9SwTCpCLxLBcOkIvCusoKT9/WFQ6OkIvCukoJwt5rO0sehUVIReBem6ng+OLBXmnKjn4PbGM5PeKnqgXIlo5vHXoL4Nl4ZYqbbEGA7+wAAAABJRU5ErkJggg==val curve
+pdf("Billeder_duration/survival_curve_man_57.pdf")
+plot(surv_curve, xlab = "Time (days)", ylab = "Survival Probability", main = "Survival Probability over Time",
+     conf.int = TRUE, col = "blue", lwd = 2)
+dev.off()
+
+
+
+#Opgave 8 ----
+
+# Estimate the cumulative baseline hazard from the Cox model
+base_haz <- basehaz(cox_model_log, centered = FALSE)
+
+# Plot the cumulative baseline hazard over time
+pdf("Billeder_duration/cumulative_baseline_hazard_over_time.pdf")
+plot(base_haz$time, base_haz$hazard, type = "l", col = "blue", lwd = 2,
+     xlab = "Time", ylab = "Cumulative Baseline Hazard",
+     main = "Cumulative Baseline Hazard from Cox Model")
+dev.off()
+# Plot log-log of cumulative hazard for assessing Weibull fit
+plot(log(base_haz$time), log(base_haz$hazard), type = "l", col = "blue", lwd = 2,
+     xlab = "log(Time)", ylab = "log(Cumulative Baseline Hazard)",
+     main = "Log-Log Plot of Cumulative Baseline Hazard")
+
+# Fit an exponential model
+exp_model <- survreg(Surv(time, dead) ~ log(age) + logthick + epicell + ici + ulceration + sex + invas2, 
+                     data = df_melanoma30, dist = "exponential")
+summary(exp_model)
+# Fit a Weibull model
+weibull_model <- survreg(Surv(time, dead) ~ log(age) + logthick + epicell + ici + ulceration + sex + invas2, 
+                         data = df_melanoma30, dist = "weibull")
+summary(weibull_model)
 
 
