@@ -160,7 +160,7 @@ martingale_residuals <- residuals(cox_model, type = "martingale")
 df_melanoma30$martingale_residuals <- martingale_residuals
 
 # Plot martingale residuals against fitted values
-pdf("Billeder_duration/martingale_residuals_against_fitted_values.pdf")
+pdf("Billeder_duration/martingale_residuals_against_fitted_values.pdf",width = 25,height = 12)
 ggplot(df_melanoma30, aes(x = fitted(cox_model), y = martingale_residuals)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "loess", color = "blue") +

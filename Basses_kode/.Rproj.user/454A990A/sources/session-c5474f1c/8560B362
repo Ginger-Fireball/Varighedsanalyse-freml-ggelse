@@ -3,7 +3,7 @@
     "path": "~/7 sem/Mini_project_varighedsanalyse_ekstra.R",
     "project_path": null,
     "type": "r_source",
-    "hash": "2602723619",
+    "hash": "1525236820",
     "contents": "",
     "dirty": false,
     "created": 1730458605108.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "249,0",
-        "scrollLine": "234"
+        "cursorPosition": "171,0",
+        "scrollLine": "156"
     },
     "folds": "",
-    "lastKnownWriteTime": 1730968864,
+    "lastKnownWriteTime": 1730969961,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1730968864423,
+    "last_content_update": 1730969961257,
     "read_only": false,
     "read_only_alternatives": []
 }
