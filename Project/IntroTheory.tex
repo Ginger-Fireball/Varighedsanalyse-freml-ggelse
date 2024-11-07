@@ -210,25 +210,34 @@ Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilk
     \label{fig:enter-label}
 \end{figure}
 
-\noindent Martingale residualerne for thickness er dog noget mere svingende. Her ser man afvigelser fra den lineære tendens hvilket kan skyldes flere ting. Først er det værd at bemærke at koefficienten for denne variabel $\approx 0$ hvilket kunne være relativt misvisende eftersom tykkelsen af tumor skulle have ret stor indflydelse på overlevelses sandsynligheden. Ydermere er der i thickness parameteren også en del outliers og en transformation (log, kvadratrod, el. lign) kan dermed være effektiv. Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i opgave 6.
+\noindent Martingale residualerne for thickness er dog noget mere svingende. Her ser man afvigelser fra den lineære tendens hvilket kan skyldes flere ting. Først er det værd at bemærke at koefficienten for denne variabel $\approx 0$ hvilket kunne være relativt misvisende eftersom tykkelsen af tumor skulle have ret stor indflydelse på overlevelses sandsynligheden. Ydermere er der i thickness parameteren også en del outliers og en transformation (log, kvadratrod, el. lign) kan dermed være effektiv.
+Martingale residualerne udregnes ved
+\begin{align*}
+    r_i^M = \delta_i - \hat{H}_0(t_i) \exp(z_i \hat{\beta}).
+\end{align*}
+Ved gennemgang af AIC for en model med en log transformeret thickness opnåes også en bedre AIC score hvilket vil blive berørt nærmere i opgave 6.
 
 \chapter{5. Opgave}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{Basses_kode/Billeder_duration/log_Cox_Snell_residualer.pdf}
+    \subfloat[Uden naturlig logaritme]{
+    \includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Cox_Snell_residualer.pdf}}\hfill
+    \subfloat[Med naturlig logaritme]{
+    \includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/log_Cox_Snell_residualer.pdf}}\hfill
     \caption{Cox-Snell}
     \label{fig:enter-label}
 \end{figure}
-Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transformation på paremetrene samt vi plotter for vores loggede model hvor der er taget logaritmen af både age og thickness parametren. Uden log ser vi at re
-
-hvor vi ser residualerne nogenlunde følger den røde linje $y=x$ som ønsket. Det skal nævnes at det ikke er perfekt men giver en god approksimation. Cox-Snell residualerne er givet som minus den naturlige logaritme af overlevelsessandsynligheden for hver observation.\\\\
-Martingale residualerne som vi også gennemgik nogle af i opgave 4 udregnes på følgende måde:
-\begin{align*}
-    r_i^M = \delta_i - \hat{H}_0(t_i) \exp(z_i \hat{\beta})
-\end{align*}
-I plottene vist for age og thickness ser vi igen nogle relativt konstante kurver og residualer som er spredt ligeligt omkring.\\\\
-
-\noindent Tjekkes deviance residuals, som udregnes med følgende formel: 
+Vi starter med at tjekke Cox-Snell residualerne. Vi plotter både uden transformation på paremetrene samt vi plotter for vores loggede model hvor der er taget logaritmen af både age og thickness parametren. Uden log ser vi at residualerne afviger let fra $x=y$ hvilket ikke er optimalt. Dog kan man samtidig argumentere for at der ikke er indikation for at modellen er forkert eftersom den følger nogenlunde. Plottet med de loggede værdier viser et bedre fit med residualer der følger $x=y$. Cox-Snell residualerne er givet som "minus den naturlige logaritme af overlevelsessandsynligheden for hver observation".\\\\
+\newpage
+    \begin{figure}[h]
+    \centering
+    \includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/martingale_residuals_against_fitted_values.pdf}
+    \caption{Martingale residualer}
+    \label{fig:enter-label}
+\end{figure}
+\noindent Martingale residualerne som vi også gennemgik nogle af i opgave 4 ses her mod de fittede værdier. Plottet kunne indikere at der er et ikke lineært sammenhæng da der er en let nedadgående tendens i residualerne.
+\pause
+Tjekkes deviance residuals, som udregnes med følgende formel: 
 \begin{align}
 r_i^D = \text{sign}(r_i^M) \left[ -2 \left( r_i^M + \delta_i \log(\delta_i - r_i^M) \right) \right]^{1/2}
 \end{align} 
@@ -268,15 +277,7 @@ Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan 
 \textbf{ici:} Denne er relativt konstant.\\
 \textbf{ulceration:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne.\\
 \textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant.\\
-\textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve. 
-\newpage
-    \begin{figure}[h]
-    \centering
-    \subfloat[Age]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Age.pdf}}\hfill
-  \subfloat[Thickness]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Tumor_Thickness.pdf}}\hfill
-    \caption{Age og Thickness martingale residualer}
-    \label{fig:enter-label}
-\end{figure}
+\textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve. \\\\
 
 \noindent Vi benytter derefter dfbeta plottene for at tjekke efter såkaldte "influential points", hvor det observeres der ikke er nogle umiddelbare influential points.\\\\
 \noindent Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit.
@@ -284,8 +285,12 @@ Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan 
 
 
 \chapter{6. Opgave}
+the p value of log thickness is not under so we cant reject the null hypothesis
+This suggests that logthick (tumor thickness) may not have a statistically
+significant effect on survival in this model.
 \chapter{7. Opgave}
-
+Manden har $27,8\%$ chance for at leve til han er 65 år gammel. 
+Nedenfor kan survival kurven ses for manden.
 
 
 \chapter{8. Opgave}
