@@ -214,9 +214,17 @@ Kigger man på martingale residualerne for alder ses en meget stabil kurve hvilk
 
 \chapter{5. Opgave}
 Vi starter med at tjekke Cox-Snell residualerne, hvor vi ser residualerne nogenlunde følger den røde linje $y=x$ som ønsket. Det skal nævnes at det ikke er perfekt men giver en god approksimation. Cox-Snell residualerne er givet som minus den naturlige logaritme af overlevelsessandsynligheden for hver observation.\\\\
-Martingale residualerne som vi også gennemgik nogle af i opgave 4 plottes også. Her ser vi igen nogen relativt konstante kurver og residualer som er spredt ligeligt omkring.\\\\
+Martingale residualerne som vi også gennemgik nogle af i opgave 4 udregnes på følgende måde:
+\begin{align*}
+    r_i^M = \delta_i - \hat{H}_0(t_i) \exp(z_i \hat{\beta})
+\end{align*}
+I plottene vist for age og thickness ser vi igen nogle relativt konstante kurver og residualer som er spredt ligeligt omkring.\\\\
 
-\noindent Tjekkes deviance residuals så skal de gerne følge en nogenlunde normaldistribution, hvilket indikerer at modellen er korrekt.\\\\
+\noindent Tjekkes deviance residuals, som udregnes med følgende formel: 
+\begin{align}
+r_i^D = \text{sign}(r_i^M) \left[ -2 \left( r_i^M + \delta_i \log(\delta_i - r_i^M) \right) \right]^{1/2}
+\end{align} 
+så skal de gerne følge en nogenlunde normaldistribution, hvilket indikerer at modellen er korrekt. Når densiteten af deviance residuals plottes ses en højreskæv normal distribution, hvilket indikerer at modellen er korrekt, men ikke perfekt.\\\\
 
 \noindent Schoenfield residuals giver følgende resultat:
 \begin{table}[h!]
@@ -237,25 +245,44 @@ GLOBAL     & 14.241    & 7  & 0.04706 \\
 \hline
 \end{tabular}
 \end{table}
+
+jpindher
+
 \newline 
 Det indikerer, som tidligere antaget, at thickness burde transformeres. Dog kan vi udfra plottene konkludere at de forskellige covariater ikke ser ud til at være tidsafhængige, som ønsket.\\
-\textbf{Age:} Som ønsket ligger residualerne fint spredt og vi ser en relativt flad kurve som ønsket hvilket indikerer den ikke er tidsafhængig\\
-\textbf{Thickness:} Her starter den kurven lidt højt men vi når ret hurtigt en flad kurve der er konstant\\
-\textbf{epicell:} Denne har få udsving men holder sig generelt konstant\\
+\textbf{Age:} Som ønsket ligger residualerne fint spredt og vi ser en relativt flad kurve som ønsket hvilket indikerer den ikke er tidsafhængig.\\
+\textbf{Thickness:} Her starter den kurven lidt højt men vi når ret hurtigt en flad kurve der er konstant.\\
+\textbf{epicell:} Denne har få udsving men holder sig generelt konstant.\\
 \textbf{ici:} Denne er relativt konstant.\\
-\textbf{ulceratio:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne\\
-\textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant\\
+\textbf{ulceration:} Her observeres en knap så lineær kurve, dog er udsvingende ikke markante og holder sig nogenlunde indenfor konfidensintervallerne.\\
+\textbf{sex:} Residualerne fordeler sig også ligeligt og kurven er konstant.\\
 \textbf{invas2:} Her er konfidensintervallet relativt smalt og vi har en generelt nogenlunde konstant kurve. 
 
-\begin{figure}[h]
+    \begin{figure}[h]
     \centering
     \subfloat[boxplot]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Age.pdf}}\hfill
   \subfloat[density]{\includegraphics[width=0.49\linewidth]{Basses_kode/Billeder_duration/Martingale_Residuals_vs_Tumor_Thickness.pdf}}\hfill
     \caption{Caption}
     \label{fig:enter-label}
 \end{figure}
-
+\noindent Vi benytter derefter dfbeta plottene for at tjekke efter såkaldte "influential points", hvor det observeres der ikke er nogle umiddelbare influential points.\\\\
+\noindent Overordnet set virker de forskellige tests til at indikere at modellen er et godt fit.
 
 
 
 \chapter{6. Opgave}
+\chapter{7. Opgave}
+
+
+
+\chapter{8. Opgave}
+Grafen ser ud til at være konstant over tid, hvilket indikere brugen af en eksponentiel model.
+
+Vi sammen ligner eksponentiel og weibull modellen
+\begin{lstlisting}
+       > AIC(exp_model, weibull_model)
+              df      AIC
+exp_model      8 1345.897
+weibull_model  9 1346.805 
+\end{lstlisting}
+den eksponentielle er marginalt bedre, men da både plottet over indikere eksponentiel, og det faktum at weibull er en mere kompleks model, bør den eksponentielle vælges.
