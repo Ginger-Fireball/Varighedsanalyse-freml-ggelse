@@ -244,8 +244,8 @@ plot(log(coxsnellfit$time),log(-log(coxsnellfit$surv)))
 dev.off()
 pdf("Billeder_duration/Cox_Snell_residualer.pdf")
 plot(coxsnellfit$time,-log(coxsnellfit$surv))
-dev.off()
 abline(c(0,1))
+dev.off()
 #looks pretty good.
 
 
