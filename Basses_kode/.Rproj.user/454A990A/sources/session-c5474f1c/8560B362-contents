@@ -241,6 +241,7 @@ coxsnellfit <- survfit(Surv(coxsnell,df_melanoma30$dead)~1)
 
 pdf("Billeder_duration/log_Cox_Snell_residualer.pdf")
 plot(log(coxsnellfit$time),log(-log(coxsnellfit$surv)))
+abline(c(0,1))
 dev.off()
 pdf("Billeder_duration/Cox_Snell_residualer.pdf")
 plot(coxsnellfit$time,-log(coxsnellfit$surv))
